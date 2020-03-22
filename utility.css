@@ -1,0 +1,45 @@
+.flx-std {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.flx-std-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.red {
+    color: red;
+}
+
+
+.bg-red {
+    background-color: red;
+}
+
+.bg-blue {
+    background-color: blue;
+}
+
+.white-glow {
+    text-shadow: 1px 1px 1px white,
+                 -1px 1px 1px white,
+                 1px -1px 1px white,
+                 -1px -1px 1px white;
+}
+
+.font-1-3 {
+    font-size: 1.3em;
+}
+
+.opaque {
+    opacity: 0;
+}
+
+.hidden {
+    visibility: hidden;
+}
