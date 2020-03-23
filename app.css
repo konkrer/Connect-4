@@ -58,46 +58,41 @@ main {
     display: inline-block;
     margin: 0 var(--col-margin);
     border: red 1px dashed;
-    border-top: red 0px dashed;
+    border-top: black 0px dashed;
     border-bottom: red 1px solid;
     border-radius: 5px;
     position: relative;
 }
 
 .piece-wrapper {
-    perspective: 400px;
+    perspective: 600px;
     width: calc(var(--piece-size) - 2px);
-    height: var(--piece-size);
+    height: calc(var(--piece-size) - 2px);
     position: absolute;
     transition: all 1.5s;
 }
 
 .piece {
-    position: absolute;
-    width: calc(var(--piece-size) * .9);
-    height: calc(var(--piece-size) * .9);
+    width: 94%;
+    height: 94%;
     transition: inherit;
     transform-style: preserve-3d;
-    transform-origin: center;
+    position: relative;
 }
 
 .front, 
 .back {
-    top: 0;
-    left: 0;
-    width: calc(var(--piece-size) * .9);
-    height: calc(var(--piece-size) * .9);
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
     border-radius: calc(var(--piece-size) / 2);
     position: absolute;
     backface-visibility: hidden;
 }
 
 .back {
-    transform: rotateY(180deg);
-}
-
-.flip-fall {
-    transform: rotateY(3turn);
+    transform: rotateY(.5turn);
 }
 
 .flipped {
