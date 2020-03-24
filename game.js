@@ -8,6 +8,7 @@
 class ConnectFour {
     constructor(rows, cols) {      
         this.DOMBoard = document.querySelector('.board');
+        this.DOMColumns = null;
         this.rows = rows;
         this.cols = cols;
         this.moves = 0;
@@ -19,6 +20,8 @@ class ConnectFour {
             [[1,1], [2,2], [3,3]],
             [[1,0], [2,0], [3,0]],
         ];
+        this.setRowsCSS();
+        this.addDOMColumns();
         this.initGame();
     }
 
@@ -27,11 +30,19 @@ class ConnectFour {
     initGame() {
         // Make board with a zero for each empty board spot. 2-D Array.
         this.board = new Array(this.rows).fill(0).map(el => new Array(this.cols).fill(0));
+
         this.moves = this.rows * this.cols
         this.player = 1;
         this.resetBoard();
+        this.setBoardEvtListener();
     }
     
+    //////////////////////////////////////////////////////////////
+    /*  Listen for click on game board to place piece on board. */
+    setBoardEvtListener() {
+        this.DOMBoard.addEventListener('click', setCurrCol);
+    }
+
     ////////////////////////////////////////////////////////////////
     /*  Set _currColumn to column that was clicked on and passed  */
     /*  in by game board event listener. Place piece.             */
@@ -52,6 +63,8 @@ class ConnectFour {
             // Places = how many places to drop piece.
             const places = this.alterBoard();
             if (places===-1) return;
+
+            this.DOMBoard.removeEventListener('click', setCurrCol);
 
             this.moves--;
             animateDrop(this._currColumn, places);
@@ -98,7 +111,7 @@ class ConnectFour {
                                 try {return this.board[i+dx][j+dy] === this.player;}
                                 catch(e) {return false}                       
                             })
-                        ) winner = true;                     
+                        ) winner = [ [i,j], ...delta.map(([dx, dy]) => [i+dx, j+dy]) ];                     
                     }
                 }
             });
@@ -109,14 +122,46 @@ class ConnectFour {
         }
     }
 
+    ///////////////////////////////////////////////////
+    /*  End of game animations and winner announced  */
     endGame(winner) {
-        this.DOMBoard.removeEventListener('click', setCurrCol);
-        
+        animateWinningPieces(winner);
+        animateArrows();
+        fillInWinnerDOM(winner);
+        animateGameOver();  
     }
 
+    //////////////////////////////////////////////
+    /*  Add corrent number of columns to board  */
+    setRowsCSS() {
+        let root = document.documentElement;
+        root.style.setProperty('--number-rows', this.rows + 1);
+    }
+    
+    //////////////////////////////////////////////
+    /*  Add corrent number of columns to board  */
+    addDOMColumns() {
+        for (let i=0; i<this.cols; i++) {
+            this.DOMBoard.append(this.columnFactory(i));
+        }
+        this.DOMColumns = this.DOMBoard.children;  
+    }
+    
     ///////////////////////////////////////////////////////////
     /*  Clear board then add pieces for top spots, fade in.  */
     resetBoard() {
+        const gameOverDiv = document.querySelector('.game-over');
+        // 
+        gameOverDiv.classList.add('animate-clear-g-over');
+        setTimeout(() => {
+            gameOverDiv.classList.add('hidden')
+            setTimeout(() => {
+                gameOverDiv.classList.remove('animate-g-over');
+            gameOverDiv.classList.remove('animate-clear-g-over');
+            }, 2000);
+        }, 1010);
+
+
         const cols = [...this.DOMBoard.children];
         cols.forEach(col => col.innerHTML = '');
         cols.forEach((col, i) => {
@@ -132,12 +177,22 @@ class ConnectFour {
         let flipped = '';
         if (this.player===2) flipped = 'flipped';
     
-        return `<div class="piece-wrapper flx-std opaque" data-col="${col}">
+        return `<div class="piece-viewport opaque" data-col="${col}">
+                    <div class="piece-wrapper flx-std">
                     <div class="piece ${flipped}">
-                        <div class="front bg-red" data-col="${col}"></div>
-                        <div class="back bg-blue" data-col="${col}"></div>
-                    </div>           
+                        <div class="front bg-red bdr-gold" data-col="${col}"></div>
+                        <div class="back bg-blue bdr-gold" data-col="${col}"></div>
+                    </div>
+                    </div>        
                 </div>`;
     }
     
+    //////////////////////////////////
+    /*  Make columns of game board  */ 
+    columnFactory(i) {
+        const column = document.createElement('div');
+        column.className = 'column';
+        column.setAttribute('data-col', i);
+        return column;
+    }
 }

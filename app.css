@@ -4,9 +4,8 @@
 }
 
 :root {
-    --piece-size: calc(100vh / 10);
     --number-rows: 7;
-    --number-cols: 7;
+    --piece-size: calc(100vh / calc(var(--number-rows) + 3));
     --col-margin: calc(var(--piece-size) * .05);
     --navbar-height: 50px;
 }
@@ -15,6 +14,7 @@ body {
     background-color: rgb(0, 0, 0);
     font-family: 'Gotu', sans-serif;
     font-weight: 700;
+    overflow: hidden;
 }
 
 .navbar {
@@ -24,7 +24,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* border-bottom: red 1px solid; */
+    border-bottom: red 1px solid;
     height: var(--navbar-height);
 }
 
@@ -33,14 +33,16 @@ body {
 }
 
 .navbar > button {
-    background-color: #32eef2;
+    background-color: #00da0f;
     border: none;
     font-weight: 700;
     box-shadow: 2px 2px 2px black;
 }
 
 .navbar > button:hover {
-    background-color: chartreuse;
+    background-color: rgb(0, 255, 4);
+    cursor: pointer;
+    box-shadow: 5px 5px 5px black;
 }
 
 main {
@@ -64,17 +66,25 @@ main {
     position: relative;
 }
 
-.piece-wrapper {
+.piece-viewport {
     perspective: 600px;
     width: calc(var(--piece-size) - 2px);
     height: calc(var(--piece-size) - 2px);
     position: absolute;
-    transition: all 1.5s;
+    transition: all 1s;
+}
+
+.piece-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: inherit;
+    transform-style: preserve-3d;
 }
 
 .piece {
-    width: 94%;
-    height: 94%;
+    width: 92%;
+    height: 92%;
     transition: inherit;
     transform-style: preserve-3d;
     position: relative;
@@ -89,17 +99,167 @@ main {
     border-radius: calc(var(--piece-size) / 2);
     position: absolute;
     backface-visibility: hidden;
+    box-shadow: 2px 2px 2px black;
 }
 
 .back {
-    transform: rotateY(.5turn);
+    transform: rotateY(0.5turn);
 }
 
-.flipped {
-    transform: rotateY(.5turn);
+.arrow-left {
+    position: absolute;
+    height: calc(calc(100vh - var(--navbar-height)) * .9);
+    width: 50vw;
+    top: calc(50px + calc(calc(100vh - var(--navbar-height)) * .05));
+    left: 100vw;
+    border-radius: 60% 10% 10% 60% / 50% 8% 8% 50%;;
+    background-image: linear-gradient(90deg, rgba(175, 4, 155, 0.689),  rgba(75, 4, 175, 0.703));
+}
+
+.arrow-right {
+    position: absolute;
+    height: calc(calc(100vh - var(--navbar-height)) * .9);
+    width: 50vw;
+    top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * .05));
+    left: -100vw;
+    border-radius: 10% 60% 60% 10%  / 8% 50% 50% 8%;
+    background-image: linear-gradient(90deg, rgba(255, 94, 0, 0.7),  rgba(26, 255, 0, 0.7));
+}
+
+.game-over {
+    position: absolute;
+    height: calc(calc(100vh - var(--navbar-height)) * .6);
+    width: 70vw;
+    top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * .15));
+    left: 15vw;
+    border-radius: 48% 48% 48% 48% / 40% 40% 40% 40%;
+    transition: all 1s;
+    border: purple groove 5px;
+    border-width: 1.5em .4em;
+    background-color:  rgba(255, 0, 0, 0.95);
+    text-align: center;
+    font-size: calc(var(--piece-size) * 1);
+}
+
+.game-over-text {
+    font-family: 'Spicy Rice', sans-serif;
 }
 
 
+
+
+
+/* Animations */
+
+.fall-flip {
+    animation: fallFlip 1s ease-out 1 normal none ;
+    /*         name    dur timing cnt diret fill */
+}
+@keyframes fallFlip 
+{
+    from {transform: rotateY(0deg)}
+    to {transform: rotateY(2turn)}
+}
+
+
+.winner {
+    animation-name: winnerSpin, pulse;
+    animation-duration:  2s, 500ms;
+    animation-delay: 0ms, 2000ms;
+    animation-direction: normal, alternate; 
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1, infinite;
+}
+@keyframes winnerSpin 
+{ 
+    from { transform: rotateY(0turn); } 
+    to { transform: rotateY(5turn); }  
+}
+@keyframes pulse 
+{ 
+    from { transform: scale(1); } 
+    to { transform: scale(0.5); }  
+}
+
+
+.shoot-arrow-left {
+    animation: arrowLeft 1s linear 4.2s 1;
+}
+@keyframes arrowLeft {
+    from {left: 100vw}
+    to {left: -100vw}
+}
+
+.shoot-arrow-right {
+    animation: arrowRight 1s linear 4s 1;
+}
+@keyframes arrowRight {
+    from {left: -100vw}
+    to {left: 100vw}
+}
+
+.animate-g-over {
+    animation-name: bgColorChange, zoomSpinGameOver;
+    animation-duration: 5s, 1s;
+    animation-iteration-count: infinite, 1;
+    animation-timing-function: linear, ease-in;
+    animation-direction: normal;
+}
+@keyframes bgColorChange {
+    0% {
+        background-color:  rgba(182, 0, 0, 0.85);
+        border: rgb(0, 251, 255) groove 3px;
+        border-width: 1.5em .4em;
+    }
+    20% {
+        background-color: rgba(255, 123, 0, 0.85);
+        border: rgb(0, 0, 128) groove 5px;
+        border-width: 1.0em .2em;
+    }
+    40% {
+        background-color: rgba(0, 229, 255, 0.85);
+        border: rgb(148, 0, 223) groove 5px;
+        border-width: 0.5em 0.5em;
+    }
+    60% {
+        background-color: rgba(0, 0, 107, 0.85);
+        border: rgb(246, 255, 0) groove 5px;
+        border-width: 0.8em 0.9em;
+    }
+    80% {
+        background-color: rgba(51, 0, 133, 0.85);
+        border: rgb(25, 251, 0) groove 5px;
+        border-width: 1.2em 0.7em;
+    }
+    100% {
+        background-color: rgba(182, 0, 0, 0.85);
+        border: rgb(0, 251, 255) groove 5px;
+        border-width: 1.5em 0.4em;
+    }
+}
+@keyframes zoomSpinGameOver {
+    from {
+        transform: scale(.1);
+        opacity: .1;
+    }
+    to {
+        transform: scale(1) rotateZ(5turn);
+        opacity: 1;
+    }
+}
+
+.animate-clear-g-over {
+    animation: slideGOverDown 1s ease-in 1 forwards;
+}
+@keyframes slideGOverDown {
+    from { top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * .2)); }
+    to { top: 100vh; }
+}
+
+
+
+
+/* breakpoints */
 @media (orientation: portrait) {
     :root {
         --piece-size: calc(100vw / 10);
