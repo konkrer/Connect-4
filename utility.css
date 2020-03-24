@@ -66,3 +66,12 @@
 .hidden {
     visibility: hidden;
 }
+
+.display-none {
+    display: none;
+}
+
+fieldset {
+    border: none;
+    padding: 0;
+}

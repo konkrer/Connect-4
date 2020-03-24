@@ -46,9 +46,9 @@ function animateFlipAllTops() {
                     col.lastElementChild.firstElementChild.firstElementChild.style.transition = '';
                     // turn board event listener back on on after last flip in last column.
                     if (i===GAME.cols-1) GAME.setBoardEvtListener();
-                }, 550);
+                }, 500);
 
-            }, 50 * i);  
+            }, 30 * i);  
         });
     }, 1400);
 }
@@ -66,9 +66,11 @@ function animateWinningPieces(winner) {
 
 function animateArrows() {   
     document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
+    document.querySelector('.arrow-left').classList.remove('display-none');             // workaround devtools bug
     document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
     setTimeout(() => {
         document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
+        document.querySelector('.arrow-left').classList.add('display-none');            // workaround devtools bug
         document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
     }, 6000);
 }

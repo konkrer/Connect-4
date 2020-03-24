@@ -19,10 +19,41 @@
         <button class="start-btn">Restart Game</button>
     </nav>
 
+    <div class="settings-div">
+        <div>
+            <img class="settings settings-button" src="./static/gearbox.png"></img>
+        </div>
+        <div class="settings settings-panel hidden opaque">
+            <fieldset>
+                Columns
+                <br>
+                <label for="cols-7">7</label>
+                <input type="radio" name="cols" id="cols-7" value="7" checked>
+                <label for="cols-8">8</label>
+                <input type="radio" name="cols" id="cols-8" value="8">
+                <label for="cols-9">9</label>
+                <input type="radio" name="cols" id="cols-9" value="9">
+                <br>
+                <br>
+                Rows 
+                <br>
+                <label for="rows-6">6</label>
+                <input type="radio" name="rows" id="rows-6" value="6" checked>
+                <label for="rows-7">7</label>
+                <input type="radio" name="rows" id="rows-7" value="7">
+                <label for="rows-8">8</label>
+                <input type="radio" name="rows" id="rows-8" value="8">
+                <label for="rows-9">9</label>
+                <input type="radio" name="rows" id="rows-9" value="9">
+            </fieldset>
+        </div>
+    </div>
+    
+
     <main class="flx-std board"></main>
 
     <div class="arrow-right"></div>
-    <div class="arrow-left"></div>
+    <div class="arrow-left display-none"></div>
     <div class="game-over flx-std hidden">
         <div class="game-over-text white-glow">
            <div>GAME OVER!</div>  <div id="winner"></div>

@@ -20,7 +20,7 @@ class ConnectFour {
             [[1,1], [2,2], [3,3]],
             [[1,0], [2,0], [3,0]],
         ];
-        this.setRowsCSS();
+        this.setCSSVariables();
         this.addDOMColumns();
         this.initGame();
     }
@@ -133,14 +133,16 @@ class ConnectFour {
 
     //////////////////////////////////////////////
     /*  Add corrent number of columns to board  */
-    setRowsCSS() {
+    setCSSVariables() {
         let root = document.documentElement;
         root.style.setProperty('--number-rows', this.rows + 1);
+        root.style.setProperty('--number-cols', this.cols);
     }
     
     //////////////////////////////////////////////
     /*  Add corrent number of columns to board  */
     addDOMColumns() {
+        this.DOMBoard.innerHTML = '';
         for (let i=0; i<this.cols; i++) {
             this.DOMBoard.append(this.columnFactory(i));
         }
@@ -151,13 +153,13 @@ class ConnectFour {
     /*  Clear board then add pieces for top spots, fade in.  */
     resetBoard() {
         const gameOverDiv = document.querySelector('.game-over');
-        // 
+        // pause game over animation here??
         gameOverDiv.classList.add('animate-clear-g-over');
         setTimeout(() => {
             gameOverDiv.classList.add('hidden')
             setTimeout(() => {
                 gameOverDiv.classList.remove('animate-g-over');
-            gameOverDiv.classList.remove('animate-clear-g-over');
+                gameOverDiv.classList.remove('animate-clear-g-over');
             }, 2000);
         }, 1010);
 
