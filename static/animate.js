@@ -29,6 +29,9 @@ function animateDrop(col, places) {
 
 // Fade into view the top piece in a given column.
 function fadePieceIn(col) {
+    // Delayed so GAME object is returned first
+    // as this function is called in init method on GAME object.
+    // Also delayed for fade in on new pieces to work properly.
     setTimeout(() => {
         GAME.DOMColumns[col].lastElementChild.style.opacity = '1';
     }, 50);
