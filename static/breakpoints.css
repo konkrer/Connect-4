@@ -29,10 +29,11 @@
 }
 
 @media screen and (min-width:1400px) {
+    /*  Move gear icon right a little, from flushed with left edge of screen.  */
     .settings-div {
         left: 5%;
     }
-
+    /*  Center settings panel when gear icon not flush with left edge.  */
     .settings-panel {
         margin-left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
     }
@@ -48,6 +49,27 @@ and (orientation: landscape) {
     }
 }
 
+@media screen 
+and (max-width:565px) {
+    .navbar {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .navbar-flex {
+        width: 130px;
+    }
+    .navbar  button {
+        padding-left: 2px;
+        padding-right: 2px;
+        font-size: small;
+    }
+    .home-icon {
+        height: 21px;
+        width: 21px;
+    }
+
+}
+
 @media screen and (min-width: 591px) 
 and (max-width:1000px) 
 and (orientation: landscape) {
@@ -55,5 +77,21 @@ and (orientation: landscape) {
     .settings-panel {
         width: 130px;
         font-size: smaller;
+    }
+}
+
+@media screen and (min-width: 565px) 
+and (max-width:1000px) {
+    .navbar-flex {
+        width: 150px;
+    }
+    .navbar  button {
+        padding-left: 5px;
+        padding-right: 5px;
+        font-size: small;
+    }
+    .home-icon {
+        height: 25px;
+        width: 25px;
     }
 }
