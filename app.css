@@ -125,7 +125,7 @@ main {
     width: calc(var(--piece-size) - 2px);
     height: calc(var(--piece-size) - 2px);
     position: absolute;
-    
+    transition: opacity 1s;
 }
 
 .piece-wrapper {

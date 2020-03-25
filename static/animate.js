@@ -5,21 +5,22 @@
 function animateDrop(col, places) {
     const topPieceViewport = GAME.DOMColumns[col].lastElementChild;
 
-    const height = topPieceViewport.clientHeight;
-    // animate this??
-
+    // set transition time to 1s for flip-fall and fade in
     topPieceViewport.style.transition = 'all 1s';
+    // Pause so transition: all 1s; delay is active then drop and spin piece.
     setTimeout(() => {
+        // Drop piece appropriate distance for number of places to drop.
         topPieceViewport.style.transform = `translateY(calc(var(--piece-size) * ${places + 1}))`;
         topPieceViewport.firstElementChild.classList.add('fall-flip');
-    }, 50);
-  
+    }, 10);
+    
     const newPiece = GAME.pieceFactory(col)
 
     //  After top piece has dropped add newPiece and fade it in.
     setTimeout(() => {
-        topPieceViewport.style.transition = '';
-        topPieceViewport.firstElementChild.classList.remove('fall-flip');  // unnecessary???
+        // return transition to default setting.
+        topPieceViewport.style.transition = 'opacity 1s';
+        topPieceViewport.firstElementChild.classList.remove('fall-flip');
         topPieceViewport.parentElement.innerHTML += newPiece;    
         if (places > 0) fadePieceIn(col);
     }, 1100);
@@ -61,7 +62,7 @@ function animateFlipAllTops() {
 }
 
 // Animate winning pieces to spin then pulse by adding winner class.
-// Delay for piece to complete drop in board.
+// Delayed to wait for piece to complete drop in board.
 function animateWinningPieces(winner) {
     // winner will be false with tie.
     if (!winner) return;

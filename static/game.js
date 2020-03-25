@@ -77,7 +77,7 @@ class ConnectFour {
     /*  Change board state if there's an open spot and       */
     /*  return row index of found open spot in given column. */
     alterBoard() {
-
+        // Eh... I might have ham-fisted a reduce here. Obj/Map better.
         // Find the lowest row with empty spot in column.
         // If column is full return -1.
         const openRow = this.board.reduce((acc, row, i) => {
