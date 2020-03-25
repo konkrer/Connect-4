@@ -5,9 +5,9 @@
 function animateDrop(col, places) {
     const topPieceViewport = GAME.DOMColumns[col].lastElementChild;
 
-    // set transition time to 1s for flip-fall and fade in
+    // set transition time to 1s for flip-fall.
     topPieceViewport.style.transition = 'all 1s';
-    // Pause so transition: all 1s; delay is active then drop and spin piece.
+    // Pause so transition: all 1s; style is active then drop and spin piece.
     setTimeout(() => {
         // Drop piece appropriate distance for number of places to drop.
         topPieceViewport.style.transform = `translateY(calc(var(--piece-size) * ${places + 1}))`;
@@ -19,7 +19,7 @@ function animateDrop(col, places) {
     //  After top piece has dropped add newPiece and fade it in.
     setTimeout(() => {
         // return transition to default setting.
-        topPieceViewport.style.transition = 'opacity 1s';
+        topPieceViewport.style.transition = '';
         topPieceViewport.firstElementChild.classList.remove('fall-flip');
         topPieceViewport.parentElement.innerHTML += newPiece;    
         if (places > 0) fadePieceIn(col);

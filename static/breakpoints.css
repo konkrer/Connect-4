@@ -43,6 +43,10 @@
 and (max-width:590px) 
 and (orientation: landscape) {
 
+    :root {
+        --col-margin: calc(var(--piece-size) * .1);
+    }
+
     .settings-panel {
         width: 120px;
         font-size: xx-small;
@@ -73,6 +77,10 @@ and (max-width:565px) {
 @media screen and (min-width: 591px) 
 and (max-width:1000px) 
 and (orientation: landscape) {
+
+    :root {
+        --col-margin: calc(var(--piece-size) * .1);
+    }
 
     .settings-panel {
         width: 130px;
