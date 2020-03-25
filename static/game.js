@@ -140,9 +140,11 @@ class ConnectFour {
     }
     
     //////////////////////////////////////////////
-    /*  Add corrent number of columns to board  */
+    /*  Add current number of columns to board  */
     addDOMColumns() {
+        // Clear all columns from board.
         this.DOMBoard.innerHTML = '';
+        // Add columns to board.
         for (let i=0; i<this.cols; i++) {
             this.DOMBoard.append(this.columnFactory(i));
         }
@@ -150,27 +152,44 @@ class ConnectFour {
     }
     
     ///////////////////////////////////////////////////////////
-    /*  Clear board then add pieces for top spots, fade in.  */
+    /*  If game over animation is on screen clear, then clear */
+    /*  board, add pieces at top of board and fade pieces in. */
     resetBoard() {
+        this.clearGameOverPlacard();  
+        this.emptyBoardAddPieces();   
+    }
+
+    //////////////////////////////////////////////////
+    /*  Clear game-over placard if it is on screen  */
+    clearGameOverPlacard() {
         const gameOverDiv = document.querySelector('.game-over');
         // pause game over animation here??
-        gameOverDiv.classList.add('animate-clear-g-over');
-        setTimeout(() => {
-            gameOverDiv.classList.add('hidden')
+        // if game over placard is on screen clear it.
+        if (gameOverDiv.classList.contains('animate-g-over')) {
+            gameOverDiv.classList.add('animate-clear-g-over');
+            // hide placard - visibility: hidden
             setTimeout(() => {
-                gameOverDiv.classList.remove('animate-g-over');
-                gameOverDiv.classList.remove('animate-clear-g-over');
-            }, 2000);
-        }, 1010);
+                gameOverDiv.classList.add('hidden')
+                // remove animation classes from game-over div
+                setTimeout(() => {
+                    gameOverDiv.classList.remove('animate-g-over');
+                    gameOverDiv.classList.remove('animate-clear-g-over');
+                }, 2000);
+            }, 1010);
+        }
+    }
 
-
+    ///////////////////////////////////////
+    /*  Empty board and add game pieces  */ 
+    emptyBoardAddPieces() {
+        // empty board i.e. clear columns
         const cols = [...this.DOMBoard.children];
         cols.forEach(col => col.innerHTML = '');
+        // add pieces
         cols.forEach((col, i) => {
             col.innerHTML = this.pieceFactory(i);
             fadePieceIn(i)
         });
-        
     }
 
     ////////////////////////////////////////////////////////////
