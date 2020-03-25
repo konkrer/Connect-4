@@ -68,12 +68,12 @@
 @keyframes bgColorChange {
     0% {
         background-color:  rgba(182, 0, 0, 0.85);
-        border: rgba(0, 251, 255, 0.85) groove 3px;
+        border: rgba(0, 251, 255, 0.95) groove 3px;
         border-width: 1.5em .4em;
     }
     20% {
         background-color: rgba(255, 123, 0, 0.85);
-        border: rgba(0, 0, 128, 0.7) groove 5px;
+        border: rgba(0, 0, 128, 0.95) groove 5px;
         border-width: 1.0em .2em;
     }
     40% {
@@ -83,12 +83,12 @@
     }
     60% {
         background-color: rgba(0, 0, 107, 0.85);
-        border: rgba(246, 255, 0, 0.95) groove 5px;
+        border: rgba(246, 255, 0, 0.7) groove 5px;
         border-width: 0.8em 0.9em;
     }
     80% {
         background-color: rgba(51, 0, 133, 0.85);
-        border: rgba(25, 251, 0, 0.95) groove 5px;
+        border: rgba(25, 251, 0, 0.85) groove 5px;
         border-width: 1.2em 0.7em;
     }
     100% {
