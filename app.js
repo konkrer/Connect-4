@@ -5,6 +5,9 @@ let ROWS = 6, COLS = 7;
 let GAME = new ConnectFour(ROWS, COLS);
 
 
+//////////////////////////
+/*  Start Button Logic  */
+/*                      */
 // Listen to start buttons to restart game.
 const startBtns = document.getElementsByClassName('start-btn');
 [...startBtns].forEach(btn => {
@@ -17,6 +20,10 @@ function restartGame(e) {
     GAME.DOMBoard.addEventListener('click', setCurrCol);
 }
 
+
+//////////////////////////
+/*  Column click Logic  */
+/*                      */
 // If click was on any board column (element with a data-col attribute),
 // pass column number to GAME object by setting property.
 function setCurrCol(e) {
@@ -26,6 +33,10 @@ function setCurrCol(e) {
     } 
 }
 
+
+///////////////////////////
+/*  Settings menu Logic  */
+/*                       */
 // Allow clicking gear to open settings and close.
 const settings = document.querySelector('.settings-button');
 settings.addEventListener('click', toggleSettingsPanel);
@@ -35,6 +46,7 @@ const settingsPanel = document.querySelector('.settings-panel');
 settingsPanel.addEventListener('mouseover', clearSettingPanelTimeout);
 settingsPanel.addEventListener('mouseout', refreshSettingPanelTimeout);
 
+// timer id for settings panel timeout.
 let settingsPanelTimer;
 
 // Show or hide settings panel.
@@ -52,7 +64,7 @@ function toggleSettingsPanel(e) {
     }  
 }
 
-// refresh timer that hides setting panel.
+// Refresh timer that hides setting panel.
 function refreshSettingPanelTimeout() {
     clearTimeout(settingsPanelTimer);
     settingsPanelTimer = setTimeout(() => {
@@ -60,23 +72,22 @@ function refreshSettingPanelTimeout() {
     }, 2000);
 }
 
-// refresh timer that hides setting panel.
+// Clear timer that hides setting panel.
 function clearSettingPanelTimeout() {
     clearTimeout(settingsPanelTimer);
 }
 
-
-
 // Listen for changes on settings panel and start new game with new settings.
 document.querySelector('.settings-panel').addEventListener('change', settingsChange);
-// When cols or rows input changed set variable and start new game.
+
+// Set variable and start new game.
 function settingsChange(e) {
-    console.log(e.target)
     const targ = e.target;
     if (targ.name==='cols') {
         COLS = +targ.value;
     }else if (targ.name==='rows') {
         ROWS = +targ.value;
     }
+    // start new game with new settings.
     GAME = new ConnectFour(ROWS, COLS);
 }

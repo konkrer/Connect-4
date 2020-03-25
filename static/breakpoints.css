@@ -1,0 +1,59 @@
+/* breakpoints */
+
+@media (orientation: portrait) {
+    :root {
+        --piece-size: calc(100vw / 10);
+    }
+
+    .settings-div {
+        top: calc(var(--navbar-height) + 10px);
+        left: calc(50vw - calc(var(--settings-button) / 2));
+    }
+
+    .settings-panel {
+        margin-left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
+        margin-top: 0px;
+    }
+} 
+
+@media screen and (max-width:1000px) {
+    :root {
+        --settings-button: 38px;
+        --settings-panel-width: 130px;
+    }
+
+    .settings-panel {
+        width: var(--settings-panel-width);
+        font-size: smaller;
+    }
+}
+
+@media screen and (min-width:1400px) {
+    .settings-div {
+        left: 5%;
+    }
+
+    .settings-panel {
+        margin-left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
+    }
+}
+
+@media screen 
+and (max-width:590px) 
+and (orientation: landscape) {
+
+    .settings-panel {
+        width: 120px;
+        font-size: xx-small;
+    }
+}
+
+@media screen and (min-width: 591px) 
+and (max-width:1000px) 
+and (orientation: landscape) {
+
+    .settings-panel {
+        width: 130px;
+        font-size: smaller;
+    }
+}
