@@ -6,7 +6,7 @@ let GAME = new ConnectFour(ROWS, COLS);
 
 
 //////////////////////////
-/*  Start Button Logic  */
+/*  Restart Button Logic  */
 /*                      */
 // Listen to start buttons to restart game.
 const startBtns = document.getElementsByClassName('start-btn');

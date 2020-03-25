@@ -101,21 +101,29 @@ class ConnectFour {
     /*  Chech board for four pieces in a row. */
     checkForWin(flipAllTimer) {
         let winner = false;
-
+        // For each row-
         this.board.forEach((row, i) => {
+            // Check each element.
             row.forEach((el, j) => {
+                // If piece is current player's.
                 if (el===this.player) {
+                    // For each delta group --> up-right, right, down-right, down-
                     for (let delta of this.deltas) {
-                        if (
+                        if ( // If every piece is this player's they have won.
                             delta.every(([dx, dy]) => {
-                                try {return this.board[i+dx][j+dy] === this.player;}
-                                catch(e) {return false}                       
-                            })
+                                // If delta offset found valid row- 
+                                if (this.board[i+dx]) {
+                                    // check if cell value matches current player.
+                                    return this.board[i+dx][j+dy] === this.player;
+                                }
+                                return false;                    
+                            }) // If win make array with indexes of winning pieces.
                         ) winner = [ [i,j], ...delta.map(([dx, dy]) => [i+dx, j+dy]) ];                     
                     }
                 }
             });
         });
+        // If winner or game board is full stop flip animation and end game.
         if (winner || this.moves==0) {
             clearTimeout(flipAllTimer);
             this.endGame(winner);
@@ -166,14 +174,14 @@ class ConnectFour {
         // pause game over animation here??
         // if game over placard is on screen clear it.
         if (gameOverDiv.classList.contains('animate-g-over')) {
-            gameOverDiv.classList.add('animate-clear-g-over');
+            gameOverDiv.parentElement.classList.add('animate-clear-g-over');
             // hide placard - visibility: hidden
             setTimeout(() => {
-                gameOverDiv.classList.add('hidden')
+                gameOverDiv.parentElement.classList.add('hidden')
                 // remove animation classes from game-over div
                 setTimeout(() => {
                     gameOverDiv.classList.remove('animate-g-over');
-                    gameOverDiv.classList.remove('animate-clear-g-over');
+                    gameOverDiv.parentElement.classList.remove('animate-clear-g-over');
                 }, 2000);
             }, 1010);
         }
@@ -181,7 +189,7 @@ class ConnectFour {
 
     ///////////////////////////////////////
     /*  Empty board and add game pieces  */ 
-    emptyBoardAddPieces() {
+    emptyBoardAddPieces() {     
         // empty board i.e. clear columns
         const cols = [...this.DOMBoard.children];
         cols.forEach(col => col.innerHTML = '');

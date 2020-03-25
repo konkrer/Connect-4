@@ -5,23 +5,24 @@
 function animateDrop(col, places) {
     const topPieceViewport = GAME.DOMColumns[col].lastElementChild;
 
-    // set transition time to 1s for flip-fall.
-    topPieceViewport.style.transition = 'all 1s';
-    // Pause so transition: all 1s; style is active then drop and spin piece.
-    setTimeout(() => {
-        // Drop piece appropriate distance for number of places to drop.
-        topPieceViewport.style.transform = `translateY(calc(var(--piece-size) * ${places + 1}))`;
-        topPieceViewport.firstElementChild.classList.add('fall-flip');
-    }, 10);
+    // Set CSS variable so animation drops piece the correct distance.
+    document.documentElement.style.setProperty('--drop-places-count', places+1);
+    // Drop piece and spin it on the way down.
+    topPieceViewport.classList.add('drop-piece');
+    topPieceViewport.firstElementChild.classList.add('fall-flip');
     
     const newPiece = GAME.pieceFactory(col)
 
     //  After top piece has dropped add newPiece and fade it in.
     setTimeout(() => {
-        // return transition to default setting.
-        topPieceViewport.style.transition = '';
+        // Set dropped piece to have new top offset.
+        topPieceViewport.style.top = `calc(${places+1} * var(--piece-size))`;
+        // Remove animation classes from dropped piece.
+        topPieceViewport.classList.remove('drop-piece');
         topPieceViewport.firstElementChild.classList.remove('fall-flip');
-        topPieceViewport.parentElement.innerHTML += newPiece;    
+        // Add new piece to column.
+        topPieceViewport.parentElement.innerHTML += newPiece;
+        // While column is not yet full of pieces fade new piece in.   
         if (places > 0) fadePieceIn(col);
     }, 1100);
 }
@@ -93,7 +94,7 @@ function animateArrows() {
 function animateGameOver() {
     setTimeout(() => {
         const gameOverDiv = document.querySelector('.game-over');
-        gameOverDiv.classList.remove('hidden');
+        gameOverDiv.parentElement.classList.remove('hidden');
         gameOverDiv.classList.add('animate-g-over');
     }, 4700);
 }

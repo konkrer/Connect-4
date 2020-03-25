@@ -1,13 +1,23 @@
 /* Animations */
 
+.drop-piece {
+    animation: dropPiece 1s ease-in 1 normal forwards ;
+    /*         name    dur timing cnt diret fill */
+}
+@keyframes dropPiece 
+{
+    from {top: 0;}
+    to {top: calc(var(--drop-places-count) * var(--piece-size));}
+}
+
 .fall-flip {
     animation: fallFlip 1s ease-out 1 normal none ;
     /*         name    dur timing cnt diret fill */
 }
 @keyframes fallFlip 
 {
-    from {transform: rotateY(0deg)}
-    to {transform: rotateY(2turn)}
+    from {transform: rotateY(0deg);}
+    to {transform: rotateY(2turn);}
 }
 
 
@@ -58,32 +68,32 @@
 @keyframes bgColorChange {
     0% {
         background-color:  rgba(182, 0, 0, 0.85);
-        border: rgb(0, 251, 255) groove 3px;
+        border: rgba(0, 251, 255, 0.85) groove 3px;
         border-width: 1.5em .4em;
     }
     20% {
         background-color: rgba(255, 123, 0, 0.85);
-        border: rgb(0, 0, 128) groove 5px;
+        border: rgba(0, 0, 128, 0.85) groove 5px;
         border-width: 1.0em .2em;
     }
     40% {
         background-color: rgba(0, 229, 255, 0.85);
-        border: rgb(148, 0, 223) groove 5px;
+        border: rgba(149, 0, 223, 0.85) groove 5px;
         border-width: 0.5em 0.5em;
     }
     60% {
         background-color: rgba(0, 0, 107, 0.85);
-        border: rgb(246, 255, 0) groove 5px;
+        border: rgba(246, 255, 0, 0.85) groove 5px;
         border-width: 0.8em 0.9em;
     }
     80% {
         background-color: rgba(51, 0, 133, 0.85);
-        border: rgb(25, 251, 0) groove 5px;
+        border: rgba(25, 251, 0, 0.85) groove 5px;
         border-width: 1.2em 0.7em;
     }
     100% {
         background-color: rgba(182, 0, 0, 0.85);
-        border: rgb(0, 251, 255) groove 5px;
+        border: rgba(0, 251, 255, 0.85) groove 5px;
         border-width: 1.5em 0.4em;
     }
 }
@@ -102,6 +112,8 @@
     animation: slideGOverDown 1s ease-in 1 forwards;
 }
 @keyframes slideGOverDown {
-    from { top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * .2)); }
-    to { top: 100vh; }
+    0% { top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * 05.15)); }
+    50% { top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * 0.25)); }
+    90% { top: calc(var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * 0.5)); }
+    100% { top: 100vh; }
 }
