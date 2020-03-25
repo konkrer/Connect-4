@@ -7,14 +7,18 @@ function animateDrop(col, places) {
 
     const height = topPieceViewport.clientHeight;
     // animate this??
-    topPieceViewport.style.transform = `translateY(${(places + 1) * (height + 1)}px)`;
 
-    topPieceViewport.firstElementChild.classList.add('fall-flip');
-    
+    topPieceViewport.style.transition = 'all 1s';
+    setTimeout(() => {
+        topPieceViewport.style.transform = `translateY(calc(var(--piece-size) * ${places + 1}))`;
+        topPieceViewport.firstElementChild.classList.add('fall-flip');
+    }, 50);
+  
     const newPiece = GAME.pieceFactory(col)
 
     //  After top piece has dropped add newPiece and fade it in.
     setTimeout(() => {
+        topPieceViewport.style.transition = '';
         topPieceViewport.firstElementChild.classList.remove('fall-flip');  // unnecessary???
         topPieceViewport.parentElement.innerHTML += newPiece;    
         if (places > 0) fadePieceIn(col);
