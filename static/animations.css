@@ -32,7 +32,7 @@
 
 
 .shoot-arrow-left {
-    animation: arrowLeft 1s linear 4.2s 1;
+    animation: arrowLeft 1s linear 4.25s 1;
 }
 @keyframes arrowLeft {
     from {left: 100vw}
