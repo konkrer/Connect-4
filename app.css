@@ -64,13 +64,13 @@ body {
     width: 30px;
 }
 
-.settings-div {
+.settings-zone {
     position: absolute;
     top: 45vh;
     left: 0%;
 }
 
-.settings-button {   
+.settings-zone img {   
     width: var(--settings-button);
     height: var(--settings-button);
     opacity: .6;
@@ -78,20 +78,20 @@ body {
     border: 1px solid rgba(0, 255, 255, 0.717);
 }
 
-.settings-button:hover {
+.settings-zone img:hover {
     opacity: 1;
     cursor: pointer;
 }
 
 .settings-panel {
     width: var(--settings-panel-width);
-    margin-top: 10px;
+    /* margin-top: 10px; */
     z-index: 10;
     display: inline-block;
     position: absolute;
     text-align: center;
     font-size: 24px;
-    padding: 8px 0 10px 0;
+    padding: 0px 0 10px 0;
     background-color: rgb(49, 49, 49);
     border: 1px dotted red;
     border-radius: 5px;

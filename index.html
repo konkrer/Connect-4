@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Gotu|Spicy+Rice&display=swap" rel="stylesheet">
     <script defer src="./static/animate.js" type="text/javascript"></script>
     <script defer src="./static/game.js" type="text/javascript"></script>
+    <script defer src="./static/maxaminion.js" type="text/javascript"></script>
     <script defer src="./app.js" type="text/javascript"></script>
 </head>
 
@@ -29,25 +30,23 @@
         </div>  
     </nav>
 
-    <div class="settings-div">
+    <menu class="settings-zone">
         <div>
-            <img  src="./static/images/gearbox.png" alt="Gear icon."
-            class="settings settings-button"></img>
+            <img src="./static/images/gearbox.png" alt="Gear icon.">
         </div>
-        <div class="settings settings-panel hidden opaque">
+        <div class="settings-panel hidden opaque">
             <fieldset>
-                Columns
-                <br>
+                <p>Columns</p>
+
                     <label for="cols-7">7</label>
                 <input type="radio" name="cols" id="cols-7" value="7" checked>
                     <label for="cols-8">8</label>
                 <input type="radio" name="cols" id="cols-8" value="8">
                     <label for="cols-9">9</label>
                 <input type="radio" name="cols" id="cols-9" value="9">
-                <br>
-                <br>
-                Rows 
-                <br>
+                
+                <p>Rows</p>
+
                     <label for="rows-6">6</label>
                 <input type="radio" name="rows" id="rows-6" value="6" checked>
                     <label for="rows-7">7</label>
@@ -58,7 +57,7 @@
                 <input type="radio" name="rows" id="rows-9" value="9">
             </fieldset>
         </div>
-    </div>
+    </menu>
     
     <main class="flx-std board"></main>
 

@@ -20,6 +20,7 @@ class ConnectFour {
             [[1,1], [2,2], [3,3]],
             [[1,0], [2,0], [3,0]],
         ];
+        this.onePlayerGame = true;
         this.setCSSVariables();
         this.addDOMColumns();
         this.initGame();
@@ -70,8 +71,17 @@ class ConnectFour {
             animateDrop(this._currColumn, places);
             const flipAllTimer = animateFlipAllTops();
             this.checkForWin(flipAllTimer); 
-            this.switchPlayer();    
+            this.switchPlayer();
+            if (this.onePlayerGame && this.player==2) this.makeAIMove(); 
     }
+    
+    makeAIMove() {
+        this._currColumn = MAXIMINION.getMove(this.board);
+        setTimeout(() => {
+            this.placePiece();
+        }, 2000)    
+    }
+
 
     ////////////////////////////////////////////////////////////
     /*  Change board state if there's an open spot and       */

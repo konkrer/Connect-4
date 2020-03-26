@@ -75,3 +75,12 @@ fieldset {
     border: none;
     padding: 0;
 }
+
+menu {
+    padding-inline-start: 0;
+}
+
+menu p {
+    margin-block-end: .5em;
+    margin-block-start: .7em;
+}

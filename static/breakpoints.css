@@ -5,8 +5,8 @@
         --piece-size: calc(100vw / 10);
     }
 
-    .settings-div {
-        top: calc(var(--navbar-height) + 10px);
+    .settings-zone {
+        top: calc(var(--navbar-height));
         left: calc(50vw - calc(var(--settings-button) / 2));
     }
 
@@ -30,7 +30,7 @@
 
 @media screen and (min-width:1400px) {
     /*  Move gear icon right a little, from flushed with left edge of screen.  */
-    .settings-div {
+    .settings-zone {
         left: 5%;
     }
     /*  Center settings panel when gear icon not flush with left edge.  */
@@ -84,7 +84,7 @@ and (orientation: landscape) {
 
     .settings-panel {
         width: 130px;
-        font-size: smaller;
+        font-size: x-small;
     }
 }
 

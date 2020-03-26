@@ -4,6 +4,8 @@
 let ROWS = 6, COLS = 7;
 let GAME = new ConnectFour(ROWS, COLS);
 
+let MAXIMINION = new Maxaminion();
+
 
 //////////////////////////
 /*  Restart Button Logic  */
@@ -38,7 +40,7 @@ function setCurrCol(e) {
 /*  Settings menu Logic  */
 /*                       */
 // Allow clicking gear to open settings and close.
-const settings = document.querySelector('.settings-button');
+const settings = document.querySelector('.settings-zone img');
 settings.addEventListener('click', toggleSettingsPanel);
 
 // Allow mouseover to keep settings panel open.
