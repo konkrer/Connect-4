@@ -111,7 +111,7 @@ class ConnectFour {
     ///////////////////////////////////////////////////////
     /*  Use random choice to make AI vs. AI first move.  */
     aiVsAiFirstMove() {
-        this._currColumn = (Math.floor(Math.random() * this._cols));
+        this._currColumn = MAXIMINION.getMove(this.board, this.player);
         // Delay start so individual flip piece timers clear on 
         // board being empty when checked.
         setTimeout(() => this.placePiece(), 330);  
@@ -286,7 +286,7 @@ class ConnectFour {
         if (this.player===2) flipped = 'flipped';
     
         return `<div class="piece-viewport opaque" data-col="${col}">
-                    <div class="piece-wrapper flx-std">
+                    <div class="piece-wrapper">
                     <div class="piece ${flipped}">
                         <div class="front bg-red bdr-gold" data-col="${col}"></div>
                         <div class="back bg-blue bdr-gold" data-col="${col}"></div>
