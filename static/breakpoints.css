@@ -11,7 +11,8 @@
     }
 
     .settings-panel {
-        margin-left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
+        top: calc(var(--settings-button) + .4em);
+        left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
         margin-top: 0px;
     }
 } 
@@ -23,7 +24,6 @@
     }
 
     .settings-panel {
-        width: var(--settings-panel-width);
         font-size: smaller;
     }
 }
@@ -33,9 +33,9 @@
     .settings-zone {
         left: 5%;
     }
-    /*  Center settings panel when gear icon not flush with left edge.  */
-    .settings-panel {
-        margin-left: calc(calc(calc(var(--settings-panel-width) / 2) - calc(var(--settings-button) / 2)) * -1);
+
+    .game-over {
+        font-size: calc(var(--piece-size) * 1);
     }
 }
 

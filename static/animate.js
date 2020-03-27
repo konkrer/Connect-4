@@ -15,6 +15,8 @@ function animateDrop(col, places) {
 
     //  After top piece has dropped add newPiece and fade it in.
     setTimeout(() => {
+        // If board was cleared during delay exit.
+        if (!topPieceViewport.parentElement) return;
         // Set dropped piece to have new top offset.
         topPieceViewport.style.top = `calc(${places+1} * var(--piece-size))`;
         // Remove animation classes from dropped piece.
@@ -41,7 +43,8 @@ function fadePieceIn(col) {
 function animateFlipAllTops() {
     let colList = [...GAME.DOMColumns];
     // Reverse array so ripple originates from board right for player 2.
-    if (GAME.player===2) colList = colList.reverse();
+    const player = GAME.player;
+    if (player===2) colList = colList.reverse();
 
     // Wait for piece to drop then begin ripple.
     return setTimeout(() => {
@@ -49,16 +52,21 @@ function animateFlipAllTops() {
         colList.forEach((col, i) => {
             // Delay each piece flipping for ripple effect. Use index as multiple to delay.
             setTimeout(() => {
-                // change transition time for quick 0.5sec flip of piece.
-                col.lastElementChild.firstElementChild.firstElementChild.style.transition = 'all 0.5s';
+                if (boardIsEmpty()) return;
                 col.lastElementChild.firstElementChild.firstElementChild.classList.toggle('flipped');
-                // 
-                setTimeout(() => {
-                    // Remove inline transition style to return to default from CSS file.
-                    col.lastElementChild.firstElementChild.firstElementChild.style.transition = '';
-                    // turn board event listener back on on after last flip in last column.
-                    if (i===GAME.cols-1) GAME.setBoardEvtListener();
-                }, 500);
+
+                // Turn board event listener back on on after last flip in last column.
+                // Do after each player in two player game. 
+                // Do only after AI's turn in one player game.
+                if (
+                    i===GAME._cols - 1 
+                        && 
+                    ( GAME._aiPlayers==0 || (GAME._aiPlayers==1 && player===2) )
+                    ) {
+                        setTimeout(() => {             
+                            GAME.setBoardEvtListener();
+                        }, 500);
+                    }           
 
             }, 30 * i);  
         });
@@ -73,7 +81,7 @@ function animateWinningPieces(winner) {
     setTimeout(() => {
         // for each matrix address (x, y) of winning piece find wrapper in the DOM and add winner class.
         winner.forEach(([row, col]) => {
-            const pieceWrapper = GAME.DOMColumns[col].children[(GAME.rows-1)-row].firstElementChild;
+            const pieceWrapper = GAME.DOMColumns[col].children[(GAME._rows-1)-row].firstElementChild;
             pieceWrapper.classList.add('winner');
         });
     }, 1200);    
@@ -116,6 +124,12 @@ function fillInWinnerDOM(winBool) {
     }
     winnerDiv.innerHTML = html;
     winnerDiv.className = colorClass;
+}
+
+// Fuction to tell if board is acutally been cleared
+// and pieces no longer need to be flipped
+function boardIsEmpty() {
+    return GAME.board[GAME._rows-1].every(el => !el);
 }
 
 

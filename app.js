@@ -1,15 +1,16 @@
 'use strict'
 
 
-let ROWS = 6, COLS = 7;
-let GAME = new ConnectFour(ROWS, COLS);
+// Conncet four object and variables.
+let GAME = new ConnectFour();
 
+// AI player object.
 let MAXIMINION = new Maxaminion();
 
 
-//////////////////////////
+////////////////////////////
 /*  Restart Button Logic  */
-/*                      */
+/*                        */
 // Listen to start buttons to restart game.
 const startBtns = document.getElementsByClassName('start-btn');
 [...startBtns].forEach(btn => {
@@ -19,7 +20,6 @@ const startBtns = document.getElementsByClassName('start-btn');
 // Restart game by initalizing game and listening for column clicks.
 function restartGame(e) {
     GAME.initGame()
-    GAME.DOMBoard.addEventListener('click', setCurrCol);
 }
 
 
@@ -85,11 +85,30 @@ document.querySelector('.settings-panel').addEventListener('change', settingsCha
 // Set variable and start new game.
 function settingsChange(e) {
     const targ = e.target;
-    if (targ.name==='cols') {
-        COLS = +targ.value;
-    }else if (targ.name==='rows') {
-        ROWS = +targ.value;
+    switch(targ.name) {
+        case 'cols': {
+            GAME.cols = +targ.value;
+            break;
+        }
+        case 'rows': {
+            GAME.rows = +targ.value;
+            break;
+        }
+        case 'ai-players': {
+            GAME.aiPlayers = +targ.value;
+            break;
+        }
+        case 'ai-algo': {
+            MAXIMINION.switchEvalAlgo = +targ.value;
+            break;
+        }
+        case 'depth': {
+            MAXIMINION.depth = +targ.value;
+            break;
+        }
+        default:
+            console.error('bad flag settings change');
     }
-    // start new game with new settings.
-    GAME = new ConnectFour(ROWS, COLS);
+
+
 }

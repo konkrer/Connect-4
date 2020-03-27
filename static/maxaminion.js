@@ -5,7 +5,7 @@
 /*  minimax AI second player.                   */
 class Maxaminion {
     constructor() {
-        this._depth = 5;
+        this._depth = 2;
         this._evalFunction = this.randomEval;
     }
 
@@ -19,8 +19,9 @@ class Maxaminion {
     /////////////////////////////////////////////////
     /*  Return the column move the AI makes. This  */
     /*  function is for game object to call.       */
-    getMove(board) {
-        return this.minimax(board, false, this._depth, -Infinity, Infinity)[1];
+    getMove(board, player) {
+        let maximizing = player===1 ? true : false;
+        return this.minimax(board, maximizing, this._depth, -Infinity, Infinity)[1];
     }
 
     /////////////////////////////////////////////////
@@ -174,8 +175,19 @@ class Maxaminion {
         }
     }
 
-    aiLogic1() {
+    ///////////////////////////////////////////////
+    /*  Allow AI recursion depth to be selected. */
+    /**
+     * @param {number} choice
+     */
+    set depth(choice) {
+        this._depth = choice;
+    }
 
+    ////////////////////////////
+    /*  Evaluation Algorithm. */
+    aiLogic1() {
+        console.log("i'm doing nothing!!!")
     }
 
  }

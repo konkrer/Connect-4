@@ -6,11 +6,11 @@
 /*  A class to contain methods and data for playing a game. */
 /*  of Connect Four.                                        */
 class ConnectFour {
-    constructor(rows, cols) {      
+    constructor() {      
         this.DOMBoard = document.querySelector('.board');
         this.DOMColumns = null;
-        this.rows = rows;
-        this.cols = cols;
+        this._rows = 6;
+        this._cols = 7;
         this.moves = 0;
         this.player = 1;
         this._currColumn = null;
@@ -20,28 +20,49 @@ class ConnectFour {
             [[1,1], [2,2], [3,3]],
             [[1,0], [2,0], [3,0]],
         ];
-        this.onePlayerGame = true;
-        this.setCSSVariables();
-        this.addDOMColumns();
+        this._aiPlayers = 1;
+        this.flipAllTimer = null;
+        this.aiTimeouts = [null, null];
+        this.DOMBoardInit();
         this.initGame();
     }
+
+    //////////////////////////////////////////////////////
+    /*  Sett CSS variables based on number of rows and  */
+    /*  columns. Clear board columns and add new ones.  */
+    DOMBoardInit() {
+        this.setCSSVariables();
+        this.addDOMColumns();
+    } 
 
     ///////////////////////////
     /*  Initalize new game.  */
     initGame() {
-        // Make board with a zero for each empty board spot. 2-D Array.
-        this.board = new Array(this.rows).fill(0).map(el => new Array(this.cols).fill(0));
+        // Clear all timeouts.
+        clearTimeout(this.flipAllTimer);
+        this.aiTimeouts.forEach(id => clearTimeout(id));
 
-        this.moves = this.rows * this.cols
+        // Make board with a zero for each empty board spot. 2-D Array.
+        this.board = new Array(this._rows).fill(0).map(el => new Array(this._cols).fill(0));
+
+        this.moves = this._rows * this._cols
         this.player = 1;
+        
         this.resetBoard();
-        this.setBoardEvtListener();
+        if (this._aiPlayers < 2) this.setBoardEvtListener();
+        else this.aiVsAiFirstMove();
     }
     
     //////////////////////////////////////////////////////////////
     /*  Listen for click on game board to place piece on board. */
     setBoardEvtListener() {
         this.DOMBoard.addEventListener('click', setCurrCol);
+    }
+
+    /////////////////////////////////////////
+    /*  Remove board click event listener. */
+    removeBoardEvtListener() {
+        this.DOMBoard.removeEventListener('click', setCurrCol);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -55,6 +76,47 @@ class ConnectFour {
         this.placePiece();
     }
 
+    //////////////////////////////////////////////////////////
+    /*  Set _rows to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set rows(num) { 
+        this._rows = num;
+        this.DOMBoardInit();
+        this.initGame(); 
+    }
+
+    //////////////////////////////////////////////////////////
+    /*  Set _cols to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set cols(num) { 
+        this._cols = num;
+        this.DOMBoardInit();
+        this.initGame(); 
+    }
+
+    //////////////////////////////////////////////////////////
+    /*  Set _aiPlayers to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set aiPlayers(num) { 
+        this._aiPlayers = num;
+        this.initGame(); 
+    }
+
+    ///////////////////////////////////////////////////////
+    /*  Use random choice to make AI vs. AI first move.  */
+    aiVsAiFirstMove() {
+        this._currColumn = (Math.floor(Math.random() * this._cols));
+        // Delay start so individual flip piece timers clear on 
+        // board being empty when checked.
+        setTimeout(() => this.placePiece(), 330);  
+    }
+
 
     /////////////////////////////////////////////////////////////////////
     /*  Alter board state if there is an empty spot in chosen column.  */
@@ -65,19 +127,26 @@ class ConnectFour {
             const places = this.alterBoard();
             if (places===-1) return;
 
-            this.DOMBoard.removeEventListener('click', setCurrCol);
+            this.removeBoardEvtListener();
 
             this.moves--;
             animateDrop(this._currColumn, places);
-            const flipAllTimer = animateFlipAllTops();
-            this.checkForWin(flipAllTimer); 
+            this.flipAllTimer = animateFlipAllTops();
+            const gameOver = this.checkForWin(); 
             this.switchPlayer();
-            if (this.onePlayerGame && this.player==2) this.makeAIMove(); 
+            if (!gameOver) {
+                // If AI is active second player is AI - make AI move.
+                if (this._aiPlayers && this.player==2) this.makeAIMove();
+                // If it's AI vs. AI is player 1 is AI - make AI move.
+                if (this._aiPlayers===2 && this.player===1) this.makeAIMove();
+            }      
     }
     
+    ///////////////////////////////////////
+    /*  Make AI move after piece drops.  */
     makeAIMove() {
-        this._currColumn = MAXIMINION.getMove(this.board);
-        setTimeout(() => {
+        this.aiTimeouts[this.player-1] = setTimeout(() => {
+            this._currColumn = MAXIMINION.getMove(this.board, this.player);
             this.placePiece();
         }, 2000)    
     }
@@ -109,7 +178,7 @@ class ConnectFour {
 
     ////////////////////////////////////////////
     /*  Chech board for four pieces in a row. */
-    checkForWin(flipAllTimer) {
+    checkForWin() {
         let winner = false;
         // For each row-
         this.board.forEach((row, i) => {
@@ -135,8 +204,9 @@ class ConnectFour {
         });
         // If winner or game board is full stop flip animation and end game.
         if (winner || this.moves==0) {
-            clearTimeout(flipAllTimer);
+            clearTimeout(this.flipAllTimer);
             this.endGame(winner);
+            return true;
         }
     }
 
@@ -153,8 +223,8 @@ class ConnectFour {
     /*  Add corrent number of columns to board  */
     setCSSVariables() {
         let root = document.documentElement;
-        root.style.setProperty('--number-rows', this.rows + 1);
-        root.style.setProperty('--number-cols', this.cols);
+        root.style.setProperty('--number-rows', this._rows + 1);
+        root.style.setProperty('--number-cols', this._cols);
     }
     
     //////////////////////////////////////////////
@@ -163,7 +233,7 @@ class ConnectFour {
         // Clear all columns from board.
         this.DOMBoard.innerHTML = '';
         // Add columns to board.
-        for (let i=0; i<this.cols; i++) {
+        for (let i=0; i<this._cols; i++) {
             this.DOMBoard.append(this.columnFactory(i));
         }
         this.DOMColumns = this.DOMBoard.children;  
