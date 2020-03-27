@@ -136,11 +136,11 @@ function changeBG(e) {
             break;
         }
         case 'swatch2': {
-            root.style.setProperty('--column-bg', 'linear-gradient(#a6600d, rgba(0,0,0,.6))');
+            root.style.setProperty('--column-bg', 'linear-gradient(#a6520d, rgba(0,0,0,.6))');
             break;
         }
         case 'swatch3': {
-            root.style.setProperty('--column-bg', 'linear-gradient(#230da6, rgba(0,0,0,.6))');
+            root.style.setProperty('--column-bg', 'linear-gradient(#3b0da6, rgba(0,0,0,.6))');
             break;
         }
         case 'swatch4': {
