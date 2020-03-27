@@ -56,27 +56,44 @@
                     <label for="rows-9">9</label>
                 <input type="radio" name="rows" id="rows-9" value="9">
 
-                <p>AI</p>
+                <p>AI Settings</p>
                     <label for="ai-off">Off</label>
                 <input type="radio" name="ai-players" id="ai-off" value="0">
                     <label for="ai-on">On</label>
                 <input type="radio" name="ai-players" id="ai-on" value="1" checked>
-                <br>
                     <label for="ai-vs-ai">AI vs. AI</label>
                 <input type="radio" name="ai-players" id="ai-vs-ai" value="2">
 
-                <p>AI Oppontent</p>
-                    <label for="ai-random">Juinor</label>
-                <input type="radio" name="ai-algo" id="ai-random" value="1" checked>
-                    <label for="ai-max">Maximinion</label>
-                <input type="radio" name="ai-algo" id="ai-max" value="2">
-                <br>
-                <br>
-                    <label for="depth">AI Ability</label>
-                <input type="number" name="depth" id="depth" value="2" min="1" max="10">
-                   
+                <div id="ai-1-zone">
+                    <p>AI Opponent (blue)</p>
+                        <label for="ai-random">Juinor</label>
+                    <input type="radio" name="ai-algo" id="ai-random" value="1" checked>
+                        <label for="ai-max">Maximinion</label>
+                    <input type="radio" name="ai-algo" id="ai-max" value="2">
+                    <br>
+                        <label for="depth">AI Depth</label>
+                    <input type="number" name="depth" id="depth" value="2" min="1" max="10">
+                </div>
+
+                <div class="display-none" id="ai-2-zone">
+                    <p>AI Two (red)</p>
+                    <label for="ai-2-random">Juinor</label>
+                    <input type="radio" name="ai-algo-2" id="ai-2-random" value="1" checked>
+                        <label for="ai-2-max">Maximinion</label>
+                    <input type="radio" name="ai-algo-2" id="ai-2-max" value="2">
+                    <br>
+                        <label for="depth2">AI Depth</label>
+                    <input type="number" name="depth2" id="depth2" value="2" min="1" max="10">
+                </div>
 
             </fieldset>
+            <div class="flx-std swatch-zone">
+                <div class="swatch" id="swatch1"></div>
+                <div class="swatch" id="swatch2"></div>
+                <div class="swatch" id="swatch3"></div>
+                <div class="swatch" id="swatch4"></div>
+                <div class="swatch" id="swatch5"></div>
+            </div>
         </div>
     </menu>
     

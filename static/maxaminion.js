@@ -6,7 +6,9 @@
 class Maxaminion {
     constructor() {
         this._depth = 2;
-        this._evalFunction = this.randomEval;
+        this._algo = this.randomEval;
+        this._depth2 = 2;
+        this._algo2 = this.randomEval;
     }
 
     /////////////////////////////////////////////
@@ -20,15 +22,18 @@ class Maxaminion {
     /*  Return the column move the AI makes. This  */
     /*  function is for game object to call.       */
     getMove(board, player) {
-        let maximizing = player===1 ? true : false;
-        return this.minimax(board, maximizing, this._depth, -Infinity, Infinity)[1];
+        let maxim = player===1 ? true : false;
+        let depth = player===1 ? this._depth2 : this._depth;
+        let algo = player===1 ? this._algo2 : this._algo;
+
+        return this.minimax(board, maxim, depth, -Infinity, Infinity, algo)[1];
     }
 
     /////////////////////////////////////////////////
     /*  Minimax algorithm with alpha beta prunning  */
     /*  and recursion depth limit.                  */
     /*  Return array is [ evalValue, move, depth ]. */
-    minimax(board, maximizing, depth, alpha, beta) {
+    minimax(board, maximizing, depth, alpha, beta, algo) {
         // Check for game-over conditions
         let winnerEval = this.checkForWinner(board);
         let openColumns = this.getOpenColumns(board);
@@ -40,7 +45,9 @@ class Maxaminion {
             return [winnerEval, '', depth];
         }
         // If depth is zero evaluate board.
-        if (depth===0) return [this._evalFunction(board), '', depth];
+        if (depth===0) {
+            return [algo.call(this, board), '', depth];
+        }
         
         let bestDepth = -Infinity;
         openColumns = shuffle(openColumns);
@@ -52,7 +59,7 @@ class Maxaminion {
                 let idxRow;
                 [board, idxRow] = this.placePiece(board, col, 1);
                 // Recursive call.
-                const results = this.minimax(board, false, depth-1, alpha, beta);
+                const results = this.minimax(board, false, depth-1, alpha, beta, algo);
                 // Backtracking board state.
                 board[idxRow][col] = 0;
                 const evalValue = results[0];
@@ -78,7 +85,7 @@ class Maxaminion {
             let idxRow;
             [board, idxRow] = this.placePiece(board, col, 2);
             // Recursive call.
-            const results = this.minimax(board, true, depth-1, alpha, beta);
+            const results = this.minimax(board, true, depth-1, alpha, beta, algo);
             // Backtracking board state.
             board[idxRow][col] = 0;
             const evalValue = results[0];
@@ -162,11 +169,11 @@ class Maxaminion {
     set switchEvalAlgo(choice) {
         switch(choice) {
             case 1: {
-                this._evalFunction = this.randomEval;
+                this._algo = this.randomEval;
                 break;
             }
             case 2: {
-                this._evalFunction = this.aiLogic1;
+                this._algo = this.aiLogic1;
                 break;
             }
             default: {
@@ -184,12 +191,201 @@ class Maxaminion {
         this._depth = choice;
     }
 
-    ////////////////////////////
-    /*  Evaluation Algorithm. */
-    aiLogic1() {
-        console.log("i'm doing nothing!!!")
+    ////////////////////////////////////////////////////
+    /*  Allow alternate AI algorithms to be selected. */
+    /**
+     * @param {number} choice
+     */
+    set switchEvalAlgo2(choice) {
+        switch(choice) {
+            case 1: {
+                this._algo2 = this.randomEval;
+                break;
+            }
+            case 2: {
+                this._algo2 = this.aiLogic1;
+                break;
+            }
+            default: {
+                console.error('bad switchEvalAlgo flag');
+            }
+        }
     }
 
+    ///////////////////////////////////////////////
+    /*  Allow AI recursion depth to be selected. */
+    /**
+     * @param {number} choice
+     */
+    set depth2(choice) {
+        this._depth2 = choice;
+    }
+
+    ////////////////////////////
+    /*  Evaluation Algorithm. */
+    aiLogic1(board) {
+        let boardScore = 0 
+
+        board.forEach((row, i) => {
+            row.forEach((el, j) => {
+                // Horizontal eval
+                boardScore += this.horizCheck(board, el, i, j);
+                // Vertical eval
+                boardScore += this.vertiCheck(board, el, i, j);
+                // Horizontal eval
+                boardScore += this.upRightCheck(board, el, i, j);
+                // Vertical eval
+                boardScore += this.downRightCheck(board, el, i, j);
+            });
+        });
+        return boardScore; 
+    }
+
+    horizCheck(board, el, row, col) {
+        let emptyStreak = el ? 0 : 1;
+        let count = 0, endSpaceStreak = 0;
+        if (col <= GAME._cols-4) {
+            for (let i of [1, 2, 3]) {
+                let curr = board[row][col+i];
+                if (emptyStreak) {
+                    if (!curr) {
+                        emptyStreak += 1;
+                        // if all spaces eval is zero
+                        if (emptyStreak===3) return 0;
+                    }else {
+                        emptyStreak = - emptyStreak;
+                        el = curr;
+                    }
+                }else {
+                    if (curr===el) {
+                        count++;
+                        endSpaceStreak = 0;
+                    }
+                    else if (!curr) endSpaceStreak++;
+                    else return 0;
+                }
+            }
+            if (count) {
+                count = el===2 ? -count : count;
+                // if count is +/-2 double value this is three in a row.
+                // if two pieces with two empties on each side douvle val.
+                if (abs(count)===2 || (emptyStreak===-1 && end_space_streak===1)) {
+                    return count * 2;
+                }
+                return count;
+            }
+        }
+        return 0;
+    }
+
+    vertiCheck(board, el, row, col) {
+        let emptyStreak = el ? 0 : 1;
+        let count = 0;
+        if (row <= GAME._rows - 4) {
+            for (let i of [1, 2, 3]) {
+                let curr = board[row+i][col];
+                if (emptyStreak) {
+                    if (!curr) {
+                        emptyStreak += 1;
+                        // if all spaces eval is zero
+                        if (emptyStreak===3) return 0;
+                    }else {
+                        emptyStreak = - emptyStreak;
+                        el = curr;
+                    }
+                }else {
+                    if (curr===el) {
+                        count++;
+                    }
+                    return 0;
+                }
+            }
+            if (count) {
+                count = el===2 ? -count : count;
+                // if count is +/-2 double value this is three in a row.
+                // if two pieces with two empties on each side douvle val.
+                if (abs(count)===2) {
+                    return count * 2;
+                }
+                return count;
+            }
+        }
+        return 0;
+    }
+
+    upRightCheck(board, el, row, col) {
+        let emptyStreak = el ? 0 : 1;
+        let count = 0, endSpaceStreak = 0;
+        if (row > 2 && col <= GAME._cols-4) {
+            for (let i of [1, 2, 3]) {
+                let curr = board[row-i][col+i];
+                if (emptyStreak) {
+                    if (!curr) {
+                        emptyStreak += 1;
+                        // if all spaces eval is zero
+                        if (emptyStreak===3) return 0;
+                    }else {
+                        emptyStreak = - emptyStreak;
+                        el = curr;
+                    }
+                }else {
+                    if (curr===el) {
+                        count++;
+                        endSpaceStreak = 0;
+                    }
+                    else if (!curr) endSpaceStreak++;
+                    else return 0;
+                }
+            }
+            if (count) {
+                count = el===2 ? -count : count;
+                // if count is +/-2 double value this is three in a row.
+                // if two pieces with two empties on each side douvle val.
+                if (abs(count)===2) {
+                    return count * 2;
+                }
+                return count;
+            }
+        }
+        return 0;
+    }
+
+    downRightCheck(board, el, row, col) {
+        let emptyStreak = el ? 0 : 1;
+        let count = 0, endSpaceStreak = 0;
+        if (row <= GAME._rows-4 && col <= GAME._cols-4) {
+            for (let i of [1, 2, 3]) {
+                let curr = board[row+i][col+i];
+                if (emptyStreak) {
+                    if (!curr) {
+                        emptyStreak += 1;
+                        // if all spaces eval is zero
+                        if (emptyStreak===3) return 0;
+                    }else {
+                        emptyStreak = - emptyStreak;
+                        el = curr;
+                    }
+                }else {
+                    if (curr===el) {
+                        count++;
+                        endSpaceStreak = 0;
+                    }
+                    else if (!curr) endSpaceStreak++;
+                    else return 0;
+                }
+            }
+            if (count) {
+                count = el===2 ? -count : count;
+                // if count is +/-2 double value this is three in a row.
+                // if two pieces with two empties on each side douvle val.
+                if (abs(count)===2) {
+                    return count * 2;
+                }
+                return count;
+            }
+        }
+        return 0;
+    }
  }
 
 
@@ -200,4 +396,8 @@ function shuffle(arr) {
         [arr[rando], arr[i]] = [arr[i], arr[rando]];
     }
     return arr;
+}
+
+function abs(val) {
+    return val > 0 ? val : val * -1;
 }

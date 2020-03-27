@@ -138,7 +138,7 @@ class ConnectFour {
                 // If AI is active second player is AI - make AI move.
                 if (this._aiPlayers && this.player==2) this.makeAIMove();
                 // If it's AI vs. AI is player 1 is AI - make AI move.
-                if (this._aiPlayers===2 && this.player===1) this.makeAIMove();
+                else if (this._aiPlayers===2 && this.player===1) this.makeAIMove();
             }      
     }
     
@@ -147,10 +147,9 @@ class ConnectFour {
     makeAIMove() {
         this.aiTimeouts[this.player-1] = setTimeout(() => {
             this._currColumn = MAXIMINION.getMove(this.board, this.player);
-            this.placePiece();
+            this.placePiece()
         }, 2000)    
     }
-
 
     ////////////////////////////////////////////////////////////
     /*  Change board state if there's an open spot and       */

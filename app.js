@@ -82,7 +82,7 @@ function clearSettingPanelTimeout() {
 // Listen for changes on settings panel and start new game with new settings.
 document.querySelector('.settings-panel').addEventListener('change', settingsChange);
 
-// Set variable and start new game.
+// Set variables.
 function settingsChange(e) {
     const targ = e.target;
     switch(targ.name) {
@@ -95,7 +95,14 @@ function settingsChange(e) {
             break;
         }
         case 'ai-players': {
-            GAME.aiPlayers = +targ.value;
+            const aiPlayers = +targ.value;
+            GAME.aiPlayers = aiPlayers;
+            const aiOneZone = document.getElementById('ai-1-zone');
+            const aiTwoZone = document.getElementById('ai-2-zone');
+            if (aiPlayers===1 || aiPlayers===2) aiOneZone.classList.remove('display-none');
+            else aiOneZone.classList.add('display-none');
+            if (aiPlayers===2) aiTwoZone.classList.remove('display-none');
+            else aiTwoZone.classList.add('display-none');
             break;
         }
         case 'ai-algo': {
@@ -106,9 +113,45 @@ function settingsChange(e) {
             MAXIMINION.depth = +targ.value;
             break;
         }
+        case 'ai-algo-2': {
+            MAXIMINION.switchEvalAlgo2 = +targ.value;
+            break;
+        }
+        case 'depth2': {
+            MAXIMINION.depth2 = +targ.value;
+            break;
+        }
         default:
             console.error('bad flag settings change');
     }
+}
 
+document.querySelector('.swatch-zone').addEventListener('click', changeBG);
 
+function changeBG(e) {
+    const root = document.documentElement;
+    switch(e.target.id) {
+        case 'swatch1': {
+            root.style.setProperty('--column-bg', 'linear-gradient(#11a60d, rgba(0,0,0,.6))');
+            break;
+        }
+        case 'swatch2': {
+            root.style.setProperty('--column-bg', 'linear-gradient(#a6600d, rgba(0,0,0,.6))');
+            break;
+        }
+        case 'swatch3': {
+            root.style.setProperty('--column-bg', 'linear-gradient(#230da6, rgba(0,0,0,.6))');
+            break;
+        }
+        case 'swatch4': {
+            root.style.setProperty('--column-bg', 'linear-gradient(#a60d8e, rgba(0,0,0,.6))');
+            break;
+        }
+        case 'swatch5': {
+            root.style.setProperty('--column-bg', 'linear-gradient(#0da2a6, rgba(0,0,0,.6))');
+            break;
+        }
+        default:
+            root.style.setProperty('--column-bg', 'linear-gradient(#0da2a6, rgba(0,0,0,.6))');
+    }
 }
