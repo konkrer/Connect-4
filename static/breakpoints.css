@@ -49,11 +49,12 @@ and (orientation: landscape) {
 
     :root {
         --col-margin: calc(var(--piece-size) * .1);
+        --settings-panel-width: 120px;
     }
 
     .settings-panel {
-        width: 120px;
         font-size: xx-small;
+        top: calc(var(--settings-panel-width) * -1.3);
     }
 }
 
@@ -87,8 +88,8 @@ and (orientation: landscape) {
     }
 
     .settings-panel {
-        width: 130px;
         font-size: x-small;
+        top: calc(var(--settings-panel-width) * -1.1);
     }
 }
 

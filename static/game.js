@@ -76,7 +76,7 @@ class ConnectFour {
         this.placePiece();
     }
 
-    //////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
     /*  Set _rows to given value. Initalize new game.  */
     /**
      * @param {number} num
@@ -87,7 +87,7 @@ class ConnectFour {
         this.initGame(); 
     }
 
-    //////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
     /*  Set _cols to given value. Initalize new game.  */
     /**
      * @param {number} num
@@ -231,13 +231,53 @@ class ConnectFour {
     addDOMColumns() {
         // Clear all columns from board.
         this.DOMBoard.innerHTML = '';
+        const exDiv = document.createElement('div');
+        exDiv.id = 'ex-Div';
+        exDiv.style.position = 'relative';
+        this.DOMBoard.append(exDiv);
         // Add columns to board.
         for (let i=0; i<this._cols; i++) {
-            this.DOMBoard.append(this.columnFactory(i));
+            exDiv.append(this.columnFactory(i));
         }
-        this.DOMColumns = this.DOMBoard.children;  
+        this.DOMColumns = exDiv.children;
+        this.addOverlayGrid(exDiv); 
     }
     
+    addOverlayGrid(exdiv) {
+        const overlay = document.createElement('div');
+        overlay.classList.add('overlay-grid');
+        for (let row=0; row<this._rows; row++) {
+            overlay.append(this.createGridRow())
+        }
+        exdiv.append(overlay);
+    }
+
+    createGridRow() {
+        const row = document.createElement('div');
+        row.classList.add('overlay-row');
+        for (let col=0; col<this._cols; col++) {
+            row.append(this.createCuttoutBlock());
+        }
+        return row;
+    }
+
+    createCuttoutBlock() {
+        const cuttOutWrapper = document.createElement('div');
+        cuttOutWrapper.classList.add('cuttout-wrapper');
+
+        const cuttOutWrapperFlx = document.createElement('div');
+        cuttOutWrapperFlx.classList.add('flx-std');
+        cuttOutWrapperFlx.classList.add('cuttout-wrapper-flex');
+
+        const cuttOUt = document.createElement('div');
+        cuttOUt.classList.add('cuttout');
+
+        cuttOutWrapperFlx.append(cuttOUt);
+        cuttOutWrapper.append(cuttOutWrapperFlx);
+        return cuttOutWrapper;
+    }
+
+
     ///////////////////////////////////////////////////////////
     /*  If game over animation is on screen clear, then clear */
     /*  board, add pieces at top of board and fade pieces in. */
@@ -270,7 +310,7 @@ class ConnectFour {
     /*  Empty board and add game pieces  */ 
     emptyBoardAddPieces() {     
         // empty board i.e. clear columns
-        const cols = [...this.DOMBoard.children];
+        const cols = [...this.DOMBoard.firstElementChild.children].slice(0, this._cols);
         cols.forEach(col => col.innerHTML = '');
         // add pieces
         cols.forEach((col, i) => {
@@ -286,7 +326,7 @@ class ConnectFour {
         if (this.player===2) flipped = 'flipped';
     
         return `<div class="piece-viewport opaque" data-col="${col}">
-                    <div class="piece-wrapper">
+                    <div class="piece-wrapper flx-std">
                     <div class="piece ${flipped}">
                         <div class="front bg-red bdr-gold" data-col="${col}"></div>
                         <div class="back bg-blue bdr-gold" data-col="${col}"></div>

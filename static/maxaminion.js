@@ -241,6 +241,9 @@ class Maxaminion {
         return boardScore; 
     }
 
+    //////////////////////////////////////////////////
+    /*  Analyze value for four cell group.          */
+    /*  Looking at element and three to the right.  */
     horizCheck(board, el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
@@ -278,6 +281,9 @@ class Maxaminion {
         return 0;
     }
 
+    //////////////////////////////////////////////
+    /*  Analyze value for four cell group.      */
+    /*  Looking at element and the three below. */
     vertiCheck(board, el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0;
@@ -313,6 +319,9 @@ class Maxaminion {
         return 0;
     }
 
+    ////////////////////////////////////////////////////////
+    /*  Analyze value for four cell group.                */
+    /*  Looking at element and three up and to the right. */
     upRightCheck(board, el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
@@ -350,6 +359,9 @@ class Maxaminion {
         return 0;
     }
 
+    //////////////////////////////////////////////////////////
+    /*  Analyze value for four cell group.                  */
+    /*  Looking at element and three down and to the right. */
     downRightCheck(board, el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
@@ -389,7 +401,7 @@ class Maxaminion {
  }
 
 
-
+// shuffle array.
 function shuffle(arr) {
     for (let i in arr) {
         const rando = Math.floor(Math.random() * arr.length);
@@ -397,7 +409,7 @@ function shuffle(arr) {
     }
     return arr;
 }
-
+// return absolute value of number.
 function abs(val) {
     return val > 0 ? val : val * -1;
 }

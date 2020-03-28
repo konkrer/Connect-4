@@ -32,7 +32,7 @@
 
     <menu class="settings-zone">
         <div>
-            <img src="./static/images/gearbox.png" alt="Gear icon.">
+            <img src="./static/images/gearbox.png" alt="Gear icon." id="settings-gear1">
         </div>
         <div class="settings-panel hidden opaque">
             <fieldset>
@@ -66,7 +66,7 @@
 
                 <div id="ai-1-zone">
                     <p>AI Opponent (blue)</p>
-                        <label for="ai-random">Juinor</label>
+                        <label for="ai-random">Junior</label>
                     <input type="radio" name="ai-algo" id="ai-random" value="1" checked>
                         <label for="ai-max">Maximinion</label>
                     <input type="radio" name="ai-algo" id="ai-max" value="2">
@@ -77,7 +77,7 @@
 
                 <div class="display-none" id="ai-2-zone">
                     <p>AI Two (red)</p>
-                    <label for="ai-2-random">Juinor</label>
+                    <label for="ai-2-random">Junior</label>
                     <input type="radio" name="ai-algo-2" id="ai-2-random" value="1" checked>
                         <label for="ai-2-max">Maximinion</label>
                     <input type="radio" name="ai-algo-2" id="ai-2-max" value="2">
@@ -93,6 +93,12 @@
                 <div class="swatch" id="swatch3"></div>
                 <div class="swatch" id="swatch4"></div>
                 <div class="swatch" id="swatch5"></div>
+            </div>
+            <div class="flx-std board-type-zone">
+                <img src="./static/images/spots_board.png" alt="img board with spots for pieces"
+                id="board-overlay-icon">
+                <img src="./static/images/columns.png" alt="img board with columns"
+                id="board-columns-icon">
             </div>
         </div>
     </menu>
