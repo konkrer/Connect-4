@@ -5,10 +5,10 @@
 /*  minimax AI second player.                   */
 class Maxaminion {
     constructor() {
-        this._depth = 2;
-        this._algo = this.randomEval;
-        this._depth2 = 2;
-        this._algo2 = this.randomEval;
+        this._depth = 5;
+        this._algo = this.aiLogic1;
+        this._depth2 = 5;
+        this._algo2 = this.aiLogic1;
     }
 
     /////////////////////////////////////////////
