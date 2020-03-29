@@ -29,15 +29,16 @@ class Maxaminion {
         return this.minimax(board, maxim, depth, -Infinity, Infinity, algo)[1];
     }
 
-    /////////////////////////////////////////////////
+    //////////////////////////////////////////////////
     /*  Minimax algorithm with alpha beta prunning  */
-    /*  and recursion depth limit.                  */
+    /*  and recursion depth limit. Adapted from the */
+    /*  codecademy ML minimax unit connect four.    */
     /*  Return array is [ evalValue, move, depth ]. */
     minimax(board, maximizing, depth, alpha, beta, algo) {
-        // Check for game-over conditions
+        // Check for game-over conditions.
         let winnerEval = this.checkForWinner(board);
         let openColumns = this.getOpenColumns(board);
-        // If there was a winner or there are no open spaces on board-
+        // If there was a winner or there are no open spaces on board return data.
         if (winnerEval || openColumns.length===0) {
             // If there was no winner winnerEval is False board was full.
             //  winnerEval is set to zero as it was a tie. 
@@ -45,9 +46,7 @@ class Maxaminion {
             return [winnerEval, '', depth];
         }
         // If depth is zero evaluate board.
-        if (depth===0) {
-            return [algo.call(this, board), '', depth];
-        }
+        if (depth===0) return [algo.call(this, board), '', depth];
         
         let bestDepth = -Infinity;
         openColumns = shuffle(openColumns);
@@ -57,6 +56,7 @@ class Maxaminion {
             let bestValue = -Infinity;
             for (let col of openColumns) {
                 let idxRow;
+                // Place piece in col note row piece placed into.
                 [board, idxRow] = this.placePiece(board, col, 1);
                 // Recursive call.
                 const results = this.minimax(board, false, depth-1, alpha, beta, algo);
@@ -68,7 +68,7 @@ class Maxaminion {
                     bestValue = evalValue;
                     bestMove = col;
                     bestDepth = results[2];
-                // More depth allows for longer play / chance for human err.
+                // More depth allows for longer play / chance for human to err.
                 }else if (evalValue===bestValue && results[2] > bestDepth) {
                     bestMove = col;
                     bestDepth = results[2];
@@ -83,6 +83,7 @@ class Maxaminion {
         let bestValue = Infinity;
         for (let col of openColumns) {
             let idxRow;
+            // Place piece in col note row piece placed into.
             [board, idxRow] = this.placePiece(board, col, 2);
             // Recursive call.
             const results = this.minimax(board, true, depth-1, alpha, beta, algo);
@@ -94,7 +95,7 @@ class Maxaminion {
                 bestValue = evalValue;
                 bestMove = col;
                 bestDepth = results[2];
-            // More depth allows for longer play / chance for human err.
+            // More depth allows for longer play / chance for human to err.
             }else if (evalValue===bestValue && results[2] > bestDepth) {
                 bestMove = col;
                 bestDepth = results[2];
@@ -106,10 +107,10 @@ class Maxaminion {
         return [bestValue, bestMove, bestDepth];    
     }
 
-    ///////////////////////////////////////////////////
-    /*  Check board for four pieces in a row.        */
-    /*  Return evaluation value appropriate for the  */
-    /*  winning player.                              */
+    ///////////////////////////////////////////////
+    /*  Check board for four pieces in a row.    */
+    /*  Return evaluation value appropriate for  */
+    /*  the winning player if a player has won.  */
     checkForWinner(board) {
         let winnerEval = false;
         // For each row-
@@ -122,11 +123,11 @@ class Maxaminion {
                     // For each delta group --> up-right, right, down-right, down-
                     for (let delta of GAME.deltas) {
                         if ( // If every piece is this player's they have won.
-                            delta.every(([dx, dy]) => {
+                            delta.every(([dy, dx]) => {
                                 // If delta offset found valid row- 
-                                if (board[i+dx]) {
+                                if (board[i+dy]) {
                                     // check if cell value matches current element.
-                                    return board[i+dx][j+dy] === el;
+                                    return board[i+dy][j+dx] === el;
                                 }
                                 return false;                    
                             }) // If win set eval value for return.

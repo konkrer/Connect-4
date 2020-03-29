@@ -188,15 +188,15 @@ class ConnectFour {
                     // For each delta group --> up-right, right, down-right, down-
                     for (let delta of this.deltas) {
                         if ( // If every piece is this player's they have won.
-                            delta.every(([dx, dy]) => {
+                            delta.every(([dy, dx]) => {
                                 // If delta offset found valid row- 
-                                if (this.board[i+dx]) {
+                                if (this.board[i+dy]) {
                                     // check if cell value matches current player.
-                                    return this.board[i+dx][j+dy] === this.player;
+                                    return this.board[i+dy][j+dx] === this.player;
                                 }
                                 return false;                    
                             }) // If win make array with indexes of winning pieces.
-                        ) winner = [ [i,j], ...delta.map(([dx, dy]) => [i+dx, j+dy]) ];                     
+                        ) winner = [ [i,j], ...delta.map(([dy, dx]) => [i+dy, j+dx]) ];                     
                     }
                 }
             });

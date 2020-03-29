@@ -79,8 +79,10 @@ function animateWinningPieces(winner) {
     // winner will be false with tie.
     if (!winner) return;
     setTimeout(() => {
-        // for each matrix address (x, y) of winning piece find wrapper in the DOM and add winner class.
+        // for each matrix address (y, x) of winning piece find wrapper in the DOM and add winner class.
         winner.forEach(([row, col]) => {
+            // Find piece wrapper to animate.
+            // Note: In DOMcolumn row order is reversed compared to board matrix.
             const pieceWrapper = GAME.DOMColumns[col].children[(GAME._rows-1)-row].firstElementChild;
             pieceWrapper.classList.add('winner');
         });
@@ -91,11 +93,11 @@ function animateWinningPieces(winner) {
 // Delayed to wait for winning pieces animation to complete.
 function animateArrows() {   
     document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
-    document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools bug see * below
+    // document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools bug see * below
     document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
     setTimeout(() => {
         document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
-        document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools bug see * below
+        // document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools bug see * below
         document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
     }, 6000);
 }
