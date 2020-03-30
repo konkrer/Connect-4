@@ -1,5 +1,5 @@
 # Connect-4
-Connect four game.
+Connect four game with AI second player, AI vs. AI, or two player game mode.  Uses minimax algorithm.
 
 live at https://konkrer.github.io/Connect-4/
 

@@ -23,19 +23,6 @@ function restartGame(e) {
 }
 
 
-//////////////////////////
-/*  Column click Logic  */
-/*                      */
-// If click was on any board column (element with a data-col attribute),
-// pass column number to GAME object by setting property.
-function setCurrCol(e) {
-    const col = e.target.dataset['col'];
-    if (col) {
-        GAME.currCol = +col;
-    } 
-}
-
-
 ///////////////////////////
 /*  Settings menu Logic  */
 /*                       */
@@ -95,19 +82,9 @@ function settingsChange(e) {
             break;
         }
         case 'ai-players': {
-            // value is number of ai players picked set property on game object.
             const aiPlayers = +targ.value;
             GAME.aiPlayers = aiPlayers;
-            // additional settings zones that we hide or show.
-            const aiOneZone = document.getElementById('ai-1-zone');
-            const aiTwoZone = document.getElementById('ai-2-zone');
-            // decide what settings zones to show.
-            // first zone shows if one or two ai's picked.
-            if (aiPlayers===1 || aiPlayers===2) aiOneZone.classList.remove('display-none');
-            else aiOneZone.classList.add('display-none');
-            // second zone shows if there are 2 ai's playing.
-            if (aiPlayers===2) aiTwoZone.classList.remove('display-none');
-            else aiTwoZone.classList.add('display-none');
+            showHideAiZones(aiPlayers);     
             break;
         }
         case 'ai-algo': {
@@ -129,6 +106,20 @@ function settingsChange(e) {
         default:
             console.error('bad flag settings change');
     }
+}
+
+// Function to show or hide appropriate AI settings zones base on user choice.
+function showHideAiZones(aiPlayers) {
+    // additional settings zones that we hide or show.
+    const aiOneZone = document.getElementById('ai-1-zone');
+    const aiTwoZone = document.getElementById('ai-2-zone');
+    // decide what settings zones to show.
+    // first zone shows if one or two ai's picked.
+    if (aiPlayers===1 || aiPlayers===2) aiOneZone.classList.remove('display-none');
+    else aiOneZone.classList.add('display-none');
+    // second zone shows if there are 2 ai's playing.
+    if (aiPlayers===2) aiTwoZone.classList.remove('display-none');
+    else aiTwoZone.classList.add('display-none');
 }
 
 // Listen for clicks on color swatches.
@@ -177,3 +168,18 @@ function changeBoardType(e) {
         document.querySelector('.overlay-grid').classList.add('hidden');
     }
 }
+
+
+/***** Moved into Game Obect as Method.*****/
+// //////////////////////////
+// /*  Column click Logic  */
+// /*                      */
+// // If click was on any board column (element with a data-col attribute),
+// // pass column number to GAME object by setting property.
+// function setCurrCol(e) {
+//     console.log(this, 'this </----')
+//     const col = e.target.dataset['col'];
+//     if (col) {
+//         GAME.currCol = +col;
+//     } 
+// }

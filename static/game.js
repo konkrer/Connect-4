@@ -56,13 +56,25 @@ class ConnectFour {
     //////////////////////////////////////////////////////////////
     /*  Listen for click on game board to place piece on board. */
     setBoardEvtListener() {
-        this.DOMBoard.addEventListener('click', setCurrCol);
+        this.DOMBoard.addEventListener('click', this.setCurrCol);
     }
 
     /////////////////////////////////////////
     /*  Remove board click event listener. */
     removeBoardEvtListener() {
-        this.DOMBoard.removeEventListener('click', setCurrCol);
+        this.DOMBoard.removeEventListener('click', this.setCurrCol);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    /*  Column click Logic.                                                   */
+    /*  Having "this" issues so setup is as it is, funky but it works for now.*/
+    /*  If click was on any board column (element with a data-col attribute), */
+    /*  pass the column number to GAME object by setting property.            */
+    setCurrCol(e) {
+        const col = e.target.dataset['col'];
+        if (col) {
+            GAME.currCol = +col;
+        } 
     }
 
     ////////////////////////////////////////////////////////////////

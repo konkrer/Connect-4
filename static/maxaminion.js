@@ -24,7 +24,7 @@ class Maxaminion {
     getMove(board, player) {
         let maxim = player===1 ? true : false;
         let depth = player===1 ? this._depth2 : this._depth;
-        let algo = player===1 ? this._algo2 : this._algo;
+        let algo = player===1 ? this._algo2.bind(this) : this._algo.bind(this);
 
         return this.minimax(board, maxim, depth, -Infinity, Infinity, algo)[1];
     }
@@ -46,7 +46,7 @@ class Maxaminion {
             return [winnerEval, '', depth];
         }
         // If depth is zero evaluate board.
-        if (depth===0) return [algo.call(this, board), '', depth];
+        if (depth===0) return [algo(board), '', depth];
         
         let bestDepth = -Infinity;
         openColumns = shuffle(openColumns);
