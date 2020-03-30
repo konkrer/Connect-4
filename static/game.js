@@ -11,6 +11,8 @@ class ConnectFour {
         this.DOMColumns = null;
         this.aiTimeouts = [null, null];
         this.flipAllTimer = null;
+        this.gameOverAnimations = [null, null];
+        this._dropDelay = 800;
         this.moves = null;
         this.player = 1;
         this._rows = 6;
@@ -41,6 +43,7 @@ class ConnectFour {
         // Clear all timeouts.
         clearTimeout(this.flipAllTimer);
         this.aiTimeouts.forEach(id => clearTimeout(id));
+        this.gameOverAnimations.forEach(id => clearTimeout(id));
 
         // Make board with a zero for each empty board spot. 2-D Array.
         this.board = new Array(this._rows).fill(0).map(el => new Array(this._cols).fill(0));
@@ -49,7 +52,10 @@ class ConnectFour {
         this.player = 1;
         
         this.resetBoard();
-        if (this._aiPlayers < 2) this.setBoardEvtListener();
+        if (this._aiPlayers < 2) {
+            this.setBoardEvtListener();
+            this.resetPlayRate();
+        }
         else this.aiVsAiFirstMove();
     }
     
@@ -120,13 +126,27 @@ class ConnectFour {
         this.initGame(); 
     }
 
+    /**
+     * @param {number} num
+     */
+    set dropDelay(num) {
+        this._dropDelay = 1050 - num;
+    }
+
+    ///////////////////////////////////////////////////////
+    /*  Reset play rate to default when not AI vs. AI.  */
+    resetPlayRate() {
+        this._dropDelay = 800;
+        document.querySelector('#drop-delay').value = 250;
+    }
+
     ///////////////////////////////////////////////////////
     /*  Use random choice to make AI vs. AI first move.  */
     aiVsAiFirstMove() {
         this._currColumn = MAXIMINION.getMove(this.board, this.player);
         // Delay start so individual flip piece timers clear on 
         // board being empty when checked.
-        setTimeout(() => this.placePiece(), 330);  
+        this.aiTimeouts[this.player-1] = setTimeout(() => this.placePiece(), 1000);  
     }
 
 
@@ -160,7 +180,7 @@ class ConnectFour {
         this.aiTimeouts[this.player-1] = setTimeout(() => {
             this._currColumn = MAXIMINION.getMove(this.board, this.player);
             this.placePiece()
-        }, 2000)    
+        }, 2 * this._dropDelay)    
     }
 
     ////////////////////////////////////////////////////////////
@@ -225,9 +245,9 @@ class ConnectFour {
     /*  End of game animations and winner announced  */
     endGame(winner) {
         animateWinningPieces(winner);
-        animateArrows();
+        this.gameOverAnimations[0] = animateArrows();
         fillInWinnerDOM(winner);
-        animateGameOver();  
+        this.gameOverAnimations[1] = animateGameOver();  
     }
 
     //////////////////////////////////////////////
@@ -236,6 +256,7 @@ class ConnectFour {
         let root = document.documentElement;
         root.style.setProperty('--number-rows', this._rows + 1);
         root.style.setProperty('--number-cols', this._cols);
+        root.style.setProperty('--drop-delay', `${this._dropDelay}ms`);
     }
     
     //////////////////////////////////////////////
@@ -243,36 +264,43 @@ class ConnectFour {
     addDOMColumns() {
         // Clear all columns from board.
         this.DOMBoard.innerHTML = '';
-        const exDiv = document.createElement('div');
-        exDiv.id = 'ex-Div';
-        exDiv.style.position = 'relative';
-        this.DOMBoard.append(exDiv);
+        const colWrapper = document.createElement('div');
+        colWrapper.style.position = 'relative';
+        this.DOMBoard.append(colWrapper);
         // Add columns to board.
         for (let i=0; i<this._cols; i++) {
-            exDiv.append(this.columnFactory(i));
+            colWrapper.append(this.columnFactory(i));
         }
-        this.DOMColumns = exDiv.children;
-        this.addOverlayGrid(exDiv); 
+        this.DOMColumns = colWrapper.children;
+        this.addGridBoard(colWrapper); 
     }
     
-    addOverlayGrid(exdiv) {
-        const overlay = document.createElement('div');
-        overlay.classList.add('overlay-grid');
+    ////////////////////////////////////////////////////
+    /*  Add grid board to DOM as main board display.  */
+    addGridBoard(colWrapper) {
+        const gridBoard = document.createElement('div');
+        gridBoard.classList.add('grid-board');
         for (let row=0; row<this._rows; row++) {
-            overlay.append(this.createGridRow())
+            gridBoard.append(this.createGridRow())
         }
-        exdiv.append(overlay);
+        colWrapper.append(gridBoard);
     }
 
+    ///////////////////////////////////////////////////
+    /*  Create row of "cutout" cells for grid board. */
     createGridRow() {
         const row = document.createElement('div');
-        row.classList.add('overlay-row');
+        row.classList.add('grid-row');
         for (let col=0; col<this._cols; col++) {
             row.append(this.createCuttoutBlock());
         }
         return row;
     }
 
+    ////////////////////////////////////////////////////////////////
+    /*  Create block with black circle in center for grid board.  */
+    /*  This is inline-block with flex-box inside with            */
+    /*  black circle div inside.                                   */
     createCuttoutBlock() {
         const cuttOutWrapper = document.createElement('div');
         cuttOutWrapper.classList.add('cuttout-wrapper');

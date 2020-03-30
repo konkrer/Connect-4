@@ -175,7 +175,7 @@ main {
     border-bottom: red 1px solid;
 }
 
-.overlay-grid {
+.grid-board {
     position: absolute;
     background-image: var(--column-bg);
     width: 100%;
@@ -185,7 +185,7 @@ main {
     border-radius: 5px;
 }
 
-.overlay-row {
+.grid-row {
     height: var(--piece-size);
 }
 

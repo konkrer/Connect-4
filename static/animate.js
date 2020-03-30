@@ -26,7 +26,7 @@ function animateDrop(col, places) {
         topPieceViewport.parentElement.innerHTML += newPiece;
         // While column is not yet full of pieces fade new piece in.   
         if (places > 0) fadePieceIn(col);
-    }, 1100);
+    }, GAME._dropDelay + 10);
 }
 
 // Fade into view the top piece in a given column.
@@ -65,12 +65,12 @@ function animateFlipAllTops() {
                     ) {
                         setTimeout(() => {             
                             GAME.setBoardEvtListener();
-                        }, 500);
+                        }, GAME._dropDelay * 0.5);
                     }           
 
-            }, 30 * i);  
+            }, GAME._dropDelay * 0.03 * i);  
         });
-    }, 1400);
+    }, GAME._dropDelay + 0.4 * GAME._dropDelay);
 }
 
 // Animate winning pieces to spin then pulse by adding winner class.
@@ -86,26 +86,28 @@ function animateWinningPieces(winner) {
             const pieceWrapper = GAME.DOMColumns[col].children[(GAME._rows-1)-row].firstElementChild;
             pieceWrapper.classList.add('winner');
         });
-    }, 1200);    
+    }, GAME._dropDelay + GAME._dropDelay * 0.2);    
 }
 
 // Animate "arrows" that shoot in both directions across x-axis in the middle of the game board zone.
 // Delayed to wait for winning pieces animation to complete.
-function animateArrows() {   
-    document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
-    // document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools bug see * below
-    document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
-    setTimeout(() => {
-        document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
-        // document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools bug see * below
-        document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
-    }, 6000);
+function animateArrows() {
+    return setTimeout(() => {
+        document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
+        // document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools bug see * below
+        document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
+        setTimeout(() => {
+            document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
+            // document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools bug see * below
+            document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
+        }, 6000);
+    }, 4250)  
 }
 
 // Animate game over placard spinning into view.
 // Delayed to allow arrows to cross in center of screen.
 function animateGameOver() {
-    setTimeout(() => {
+    return setTimeout(() => {
         const gameOverDiv = document.querySelector('.game-over');
         gameOverDiv.parentElement.classList.remove('hidden');
         gameOverDiv.classList.add('animate-g-over');

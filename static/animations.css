@@ -1,7 +1,11 @@
 /* Animations */
 
+:root {
+    --drop-delay: 1s;
+}
+
 .drop-piece {
-    animation: dropPiece 1s ease-in 1 normal forwards ;
+    animation: dropPiece var(--drop-delay) ease-in 1 normal forwards ;
     /*         name    dur timing cnt diret fill */
 }
 @keyframes dropPiece 
@@ -11,7 +15,7 @@
 }
 
 .fall-flip {
-    animation: fallFlip 1s ease-out 1 normal none ;
+    animation: fallFlip var(--drop-delay) ease-out 1 normal none ;
     /*         name    dur timing cnt diret fill */
 }
 @keyframes fallFlip 
@@ -42,7 +46,7 @@
 
 
 .shoot-arrow-left {
-    animation: arrowLeft 1s linear 4.25s 1;
+    animation: arrowLeft 1s 250ms linear 1;
 }
 @keyframes arrowLeft {
     from {left: 100vw}
@@ -50,7 +54,7 @@
 }
 
 .shoot-arrow-right {
-    animation: arrowRight 1s linear 4s 1;
+    animation: arrowRight 1s linear 1;
 }
 @keyframes arrowRight {
     from {left: -100vw}

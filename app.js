@@ -103,8 +103,12 @@ function settingsChange(e) {
             MAXIMINION.depth2 = +targ.value;
             break;
         }
+        case 'drop-delay': {
+            GAME.dropDelay = +targ.value;
+            break;
+        }
         default:
-            console.error('bad flag settings change');
+            console.error('bad flag settings change', targ.name);
     }
 }
 
@@ -168,6 +172,10 @@ function changeBoardType(e) {
         document.querySelector('.overlay-grid').classList.add('hidden');
     }
 }
+
+document.querySelector('.game-over-wrapper').addEventListener('click', function(e) {
+    this.classList.add('animate-clear-g-over');
+})
 
 
 /***** Moved into Game Obect as Method.*****/
