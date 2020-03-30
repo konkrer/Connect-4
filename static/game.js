@@ -9,20 +9,20 @@ class ConnectFour {
     constructor() {      
         this.DOMBoard = document.querySelector('.board');
         this.DOMColumns = null;
+        this.aiTimeouts = [null, null];
+        this.flipAllTimer = null;
+        this.moves = null;
+        this.player = 1;
         this._rows = 6;
         this._cols = 7;
-        this.moves = 0;
-        this.player = 1;
-        this._currColumn = null;
+        this._aiPlayers = 1;
+        this._currColumn = null;      
         this.deltas = [
             [[-1,1], [-2,2], [-3,3]],
             [[0,1], [0,2], [0,3]],
             [[1,1], [2,2], [3,3]],
             [[1,0], [2,0], [3,0]],
-        ];
-        this._aiPlayers = 1;
-        this.flipAllTimer = null;
-        this.aiTimeouts = [null, null];
+        ];     
         this.DOMBoardInit();
         this.initGame();
     }
