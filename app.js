@@ -164,15 +164,17 @@ document.querySelector('.board-type-zone').addEventListener('click', changeBoard
 // Show or hide appropriate game board.
 function changeBoardType(e) {
 
-    if (e.target.id=="board-overlay-icon") {
+    if (e.target.id=="board-grid-icon") {
         [...GAME.DOMColumns].forEach(col => col.classList.remove('column-visible'));
-        document.querySelector('.overlay-grid').classList.remove('hidden');
-    }else if (e.target.id=="board-columns-icon") {
+        document.querySelector('.grid-board').classList.remove('hidden');
+    }
+    else if (e.target.id=="board-columns-icon") {
         [...GAME.DOMColumns].forEach(col => col.classList.add('column-visible'));
-        document.querySelector('.overlay-grid').classList.add('hidden');
+        document.querySelector('.grid-board').classList.add('hidden');
     }
 }
 
+// Clear game over placard when it is clicked.
 document.querySelector('.game-over-wrapper').addEventListener('click', function(e) {
     this.classList.add('animate-clear-g-over');
 })

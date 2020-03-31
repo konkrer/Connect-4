@@ -1,21 +1,17 @@
 'use strict'
 
+
 //////////////////////////////////////////////////
 /*  A class to hold methods and settings for a  */
 /*  minimax AI second player.                   */
 class Maxaminion {
     constructor() {
+        // These settings are for player 2 the default blue AI player.
         this._depth = 5;
         this._algo = this.aiLogic1;
+        // These settings are for player 1 the red AI player (AI vs. AI).
         this._depth2 = 5;
         this._algo2 = this.aiLogic1;
-    }
-
-    /////////////////////////////////////////////
-    /*  Return a randow value from -10 to 10.  */
-    randomEval() {
-        const maybeNegative = Math.floor(Math.random() * 2)===0 ? -1 : 1;
-        return Math.floor(Math.random() * 10) *  maybeNegative;
     }
 
     /////////////////////////////////////////////////
@@ -220,6 +216,13 @@ class Maxaminion {
      */
     set depth2(choice) {
         this._depth2 = choice;
+    }
+
+    /////////////////////////////////////////////
+    /*  Return a randow value from -10 to 10.  */
+    randomEval() {
+        const maybeNegative = Math.floor(Math.random() * 2)===0 ? -1 : 1;
+        return Math.floor(Math.random() * 10) *  maybeNegative;
     }
 
     ////////////////////////////

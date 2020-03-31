@@ -1,7 +1,7 @@
 /* Animations */
 
 :root {
-    --drop-delay: 1s;
+    --drop-delay: 800ms;
 }
 
 .drop-piece {

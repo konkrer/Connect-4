@@ -1,10 +1,9 @@
 'use strict'
 
 
-
-//////////////////////////////////////////////////////////////
-/*  A class to contain methods and data for playing a game. */
-/*  of Connect Four.                                        */
+////////////////////////////////////////////////////////////
+/*  A class to contain data, logic, and DOM manipulation  */
+/*  methods for  playing a game of Connect Four.          */
 class ConnectFour {
     constructor() {      
         this.DOMBoard = document.querySelector('.board');
@@ -29,9 +28,9 @@ class ConnectFour {
         this.initGame();
     }
 
-    //////////////////////////////////////////////////////
-    /*  Sett CSS variables based on number of rows and  */
-    /*  columns. Clear board columns and add new ones.  */
+    /////////////////////////////////////////////////////
+    /*  Sett CSS variables based on current settings.  */
+    /*  Clear board columns and add new ones.          */
     DOMBoardInit() {
         this.setCSSVariables();
         this.addDOMColumns();
@@ -126,6 +125,8 @@ class ConnectFour {
         this.initGame(); 
     }
 
+    //////////////////////////////////////
+    /*  Set _dropDelay to given value.  */
     /**
      * @param {number} num
      */
