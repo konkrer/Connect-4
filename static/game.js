@@ -11,9 +11,11 @@ class ConnectFour {
         this.aiTimeouts = [null, null];
         this.flipAllTimer = null;
         this.gameOverAnimations = [null, null];
-        this._dropDelay = 800;
+        this.board = null;
+        this.openRowInCol = null;
         this.moves = null;
         this.player = 1;
+        this._dropDelay = 800;
         this._rows = 6;
         this._cols = 7;
         this._aiPlayers = 1;
@@ -46,7 +48,7 @@ class ConnectFour {
 
         // Make board with a zero for each empty board spot. 2-D Array.
         this.board = new Array(this._rows).fill(0).map(el => new Array(this._cols).fill(0));
-
+        this.openRowInCol = this.createOpenRowMap();
         this.moves = this._rows * this._cols
         this.player = 1;
         
@@ -56,6 +58,16 @@ class ConnectFour {
             this.resetPlayRate();
         }
         else this.aiVsAiFirstMove();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    /*  Create map to hold row index of lowest open spot in each column. */
+    createOpenRowMap() {
+        const mapp = new Map();
+        for (let i=0; i<this._cols; i++) {
+            mapp.set(i, this._rows-1)
+        }
+        return mapp;
     }
     
     //////////////////////////////////////////////////////////////
@@ -141,12 +153,12 @@ class ConnectFour {
         document.querySelector('#drop-delay').value = 250;
     }
 
-    ///////////////////////////////////////////////////////
-    /*  Use random choice to make AI vs. AI first move.  */
+    //////////////////////////////////
+    /*  Make AI vs. AI first move.  */
     aiVsAiFirstMove() {
-        this._currColumn = MAXIMINION.getMove(this.board, this.player);
-        // Delay start so individual flip piece timers clear on 
-        // board being empty when checked.
+        this._currColumn = MAXIMINION.getMove();
+        // Delay start so individual flip piece timers clear on board 
+        // having been emptied - in individual animateFlipAllTops timeouts.
         this.aiTimeouts[this.player-1] = setTimeout(() => this.placePiece(), 1000);  
     }
 
@@ -154,32 +166,34 @@ class ConnectFour {
     /////////////////////////////////////////////////////////////////////
     /*  Alter board state if there is an empty spot in chosen column.  */
     /*  Animate board changes. Check for winner. Change active player. */
-    placePiece() {
-            
-            // Places = how many places to drop piece.
-            const places = this.alterBoard();
-            if (places===-1) return;
+    placePiece() {    
+        // Places = how many places to drop piece.
+        const places = this.alterBoard();
+        if (places===-1) return;
 
-            this.removeBoardEvtListener();
+        this.removeBoardEvtListener();
+        this.moves--;
 
-            this.moves--;
-            animateDrop(this._currColumn, places);
-            this.flipAllTimer = animateFlipAllTops();
-            const gameOver = this.checkForWin(); 
-            this.switchPlayer();
-            if (!gameOver) {
-                // If AI is active second player is AI - make AI move.
-                if (this._aiPlayers && this.player==2) this.makeAIMove();
-                // If it's AI vs. AI is player 1 is AI - make AI move.
-                else if (this._aiPlayers===2 && this.player===1) this.makeAIMove();
-            }      
+        animateDrop(this._currColumn, places);
+        this.flipAllTimer = animateFlipAllTops();
+
+        const gameOver = this.checkForWin(); 
+        this.switchPlayer();
+
+        if (!gameOver) {     
+            // If AI is active and this player 2 or it's AI vs. AI and this player 1.   
+            if (this._aiPlayers && this.player==2
+                    ||
+                this._aiPlayers===2 && this.player===1
+            ) this.makeAIMove();
+        }      
     }
     
     ///////////////////////////////////////
     /*  Make AI move after piece drops.  */
     makeAIMove() {
         this.aiTimeouts[this.player-1] = setTimeout(() => {
-            this._currColumn = MAXIMINION.getMove(this.board, this.player);
+            this._currColumn = MAXIMINION.getMove();
             this.placePiece()
         }, 2 * this._dropDelay)    
     }
@@ -188,17 +202,16 @@ class ConnectFour {
     /*  Change board state if there's an open spot and       */
     /*  return row index of found open spot in given column. */
     alterBoard() {
-        // Eh... I might have ham-fisted a reduce here. Obj/Map better.
-        // Find the lowest row with empty spot in column.
-        // If column is full return -1.
-        const openRow = this.board.reduce((acc, row, i) => {
-            // If spot is empty accumulator is set to row index.
-            if (!row[this._currColumn]) acc = i;
-            return acc
-        }, -1);
-
-        // change state for spot if there is a spot
-        if (openRow>-1) this.board[openRow][this._currColumn] = this.player;
+        // The lowest row with empty spot in current column is it's
+        // openRowInCol map value. If column is full value will be -1.
+        const openRow = this.openRowInCol.get(this._currColumn);
+        // If open spot in this column.
+        if (openRow>=0) {
+            // Decrement value for this column.
+            this.openRowInCol.set(this._currColumn, openRow-1);
+            // change state.
+            this.board[openRow][this._currColumn] = this.player;
+        }
         return openRow;
     }
 
@@ -225,7 +238,7 @@ class ConnectFour {
                                 // If delta offset found valid row- 
                                 if (this.board[i+dy]) {
                                     // check if cell value matches current player.
-                                    return this.board[i+dy][j+dx] === this.player;
+                                    return this.board[i+dy][j+dx] === el;
                                 }
                                 return false;                    
                             }) // If win make array with indexes of winning pieces.

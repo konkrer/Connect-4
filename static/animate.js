@@ -52,7 +52,9 @@ function animateFlipAllTops() {
         colList.forEach((col, i) => {
             // Delay each piece flipping for ripple effect. Use index as multiple to delay.
             setTimeout(() => {
+                // If board was emptied no need to continue below.
                 if (boardIsEmpty()) return;
+                // Flip piece.
                 col.lastElementChild.firstElementChild.firstElementChild.classList.toggle('flipped');
 
                 // Turn board event listener back on on after last flip in last column.
@@ -94,11 +96,11 @@ function animateWinningPieces(winner) {
 function animateArrows() {
     return setTimeout(() => {
         document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
-        // document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools bug see * below
-        document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
+        // document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools if arrow issue.
+        document.querySelector('.arrow-right').classList.add('shoot-arrow-right');           // add display-none to left arrow class.
         setTimeout(() => {
             document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
-            // document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools bug see * below
+            // document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools if arrow issue.
             document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
         }, 6000);
     }, 4250)  
@@ -130,15 +132,8 @@ function fillInWinnerDOM(winBool) {
     winnerDiv.className = colorClass;
 }
 
-// Fuction to tell if board is acutally been cleared
-// and pieces no longer need to be flipped
+// Fuction to tell if board has acutally been cleared
+// and pieces no longer need to be flipped.
 function boardIsEmpty() {
     return GAME.board[GAME._rows-1].every(el => !el);
 }
-
-
-//  * devtools shows animation arrow that is off the right side of screen (@ left: 100vw) sometimes. 
-//    when checking different devices / screen sizes it appears and breaks the testing view.
-//    It's off screen and overflow is set to hidden on body element but still is giving me problems.
-//    Setting it to display: none; seemed to do the trick. May not be neccesarry beyond dev-tools bug.
-//    I would like to know more about the proper way to have things off screen like I am attempting.

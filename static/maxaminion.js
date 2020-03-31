@@ -17,12 +17,13 @@ class Maxaminion {
     /////////////////////////////////////////////////
     /*  Return the column move the AI makes. This  */
     /*  function is for game object to call.       */
-    getMove(board, player) {
-        let maxim = player===1 ? true : false;
-        let depth = player===1 ? this._depth2 : this._depth;
-        let algo = player===1 ? this._algo2.bind(this) : this._algo.bind(this);
+    /*  Player one is the maximizing player.       */
+    getMove() {
+        const maximizing = GAME.player===1 ? true : false;
+        const depth = GAME.player===1 ? this._depth2 : this._depth;
+        const algo = GAME.player===1 ? this._algo2.bind(this) : this._algo.bind(this);
 
-        return this.minimax(board, maxim, depth, -Infinity, Infinity, algo)[1];
+        return this.minimax(maximizing, depth, -Infinity, Infinity, algo)[1];
     }
 
     //////////////////////////////////////////////////
@@ -30,10 +31,11 @@ class Maxaminion {
     /*  and recursion depth limit. Adapted from the */
     /*  codecademy ML minimax unit connect four.    */
     /*  Return array is [ evalValue, move, depth ]. */
-    minimax(board, maximizing, depth, alpha, beta, algo) {
-        // Check for game-over conditions.
-        let winnerEval = this.checkForWinner(board);
-        let openColumns = this.getOpenColumns(board);
+    minimax(maximizing, depth, alpha, beta, algo) {
+        // Check for game-over conditions. See if the last player won
+        // or board is full.
+        let winnerEval = this.checkForWinner(!maximizing);
+        let openColumns = this.getOpenColumns();
         // If there was a winner or there are no open spaces on board return data.
         if (winnerEval || openColumns.length===0) {
             // If there was no winner winnerEval is False board was full.
@@ -42,32 +44,34 @@ class Maxaminion {
             return [winnerEval, '', depth];
         }
         // If depth is zero evaluate board.
-        if (depth===0) return [algo(board), '', depth];
+        if (depth===0) return [algo(), '', depth];
         
-        let bestDepth = -Infinity;
+        let bestDepth = depth;
         openColumns = shuffle(openColumns);
         let bestMove = openColumns[0];
 
         if (maximizing) {
             let bestValue = -Infinity;
             for (let col of openColumns) {
-                let idxRow;
                 // Place piece in col note row piece placed into.
-                [board, idxRow] = this.placePiece(board, col, 1);
+                const idxRow = this.placePieceInBoard(col, 1);
                 // Recursive call.
-                const results = this.minimax(board, false, depth-1, alpha, beta, algo);
-                // Backtracking board state.
-                board[idxRow][col] = 0;
-                const evalValue = results[0];
+                const [evalValue, , newDepth] = this.minimax(
+                    // input values
+                    false, depth-1, alpha, beta, algo
+                );
+                // Backtrack board and openRowinCol state.
+                GAME.board[idxRow][col] = 0;
+                GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
                 //  maximizing player looks for the highes eval number.
                 if (evalValue > bestValue) {
                     bestValue = evalValue;
                     bestMove = col;
-                    bestDepth = results[2];
+                    bestDepth = newDepth;
                 // More depth allows for longer play / chance for human to err.
-                }else if (evalValue===bestValue && results[2] > bestDepth) {
+                }else if (evalValue===bestValue && newDepth < bestDepth) {
                     bestMove = col;
-                    bestDepth = results[2];
+                    bestDepth = newDepth;
                 }
                 // Prune.
                 alpha = Math.max(alpha, bestValue);
@@ -78,23 +82,25 @@ class Maxaminion {
         // minimizing
         let bestValue = Infinity;
         for (let col of openColumns) {
-            let idxRow;
             // Place piece in col note row piece placed into.
-            [board, idxRow] = this.placePiece(board, col, 2);
+            const idxRow = this.placePieceInBoard(col, 2);
             // Recursive call.
-            const results = this.minimax(board, true, depth-1, alpha, beta, algo);
-            // Backtracking board state.
-            board[idxRow][col] = 0;
-            const evalValue = results[0];
+            const [evalValue, , newDepth] = this.minimax(
+                // input values
+                true, depth-1, alpha, beta, algo
+            );
+            // Backtrack board and openRowinCol state.
+            GAME.board[idxRow][col] = 0;
+            GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
             //  minimizing player looks for the lowest eval number.
             if (evalValue < bestValue) {
                 bestValue = evalValue;
                 bestMove = col;
-                bestDepth = results[2];
+                bestDepth = newDepth;
             // More depth allows for longer play / chance for human to err.
-            }else if (evalValue===bestValue && results[2] > bestDepth) {
+            }else if (evalValue===bestValue && newDepth < bestDepth) {
                 bestMove = col;
-                bestDepth = results[2];
+                bestDepth = newDepth;
             }
             // Prune.
             beta = Math.min(beta, bestValue);
@@ -103,27 +109,28 @@ class Maxaminion {
         return [bestValue, bestMove, bestDepth];    
     }
 
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////
     /*  Check board for four pieces in a row.    */
     /*  Return evaluation value appropriate for  */
     /*  the winning player if a player has won.  */
-    checkForWinner(board) {
+    checkForWinner(maximizing) {
+        const player = maximizing ? 1 : 2;
         let winnerEval = false;
         // For each row-
-        board.forEach((row, i) => {
+        GAME.board.forEach((row, i) => {
             // Check each element.
             row.forEach((el, j) => {
                 // If piece is here-
-                if (el) 
+                if (el===player) 
                 {
                     // For each delta group --> up-right, right, down-right, down-
                     for (let delta of GAME.deltas) {
                         if ( // If every piece is this player's they have won.
                             delta.every(([dy, dx]) => {
                                 // If delta offset found valid row- 
-                                if (board[i+dy]) {
+                                if (GAME.board[i+dy]) {
                                     // check if cell value matches current element.
-                                    return board[i+dy][j+dx] === el;
+                                    return GAME.board[i+dy][j+dx] === el;
                                 }
                                 return false;                    
                             }) // If win set eval value for return.
@@ -138,24 +145,21 @@ class Maxaminion {
     ///////////////////////////////////////////////////
     /*  Return list of game board columns with empty  /
     /*  spots for game pieces to be placed into.    */
-    getOpenColumns(board) {
-        return board[0].reduce((acc, el, i) => {
+    getOpenColumns() {
+        return GAME.board[0].reduce((acc, el, i) => {
             if (el===0) acc.push(i);
             return acc;
         }, [])
     }
 
-    /////////////////////////////////////////////////////
     /*  Place player 'piece' on board in given column. */
     /*  Find first empty spot then break.              */
-    placePiece(board, col, player) {
-        for (var i=board.length-1; i>=0; i--) {
-            if (board[i][col]===0) {
-                board[i][col] = player;
-                break;
-            }
-        }
-        return [board, i];
+    placePieceInBoard(col, player) {
+        const openRow = GAME.openRowInCol.get(col);
+        // Decrement value for this column.
+        GAME.openRowInCol.set(col, openRow-1);
+        GAME.board[openRow][col] = player;
+        return openRow;
     }
 
     ////////////////////////////////////////////////////
@@ -227,19 +231,19 @@ class Maxaminion {
 
     ////////////////////////////
     /*  Evaluation Algorithm. */
-    aiLogic1(board) {
+    aiLogic1() {
         let boardScore = 0 
 
-        board.forEach((row, i) => {
+        GAME.board.forEach((row, i) => {
             row.forEach((el, j) => {
                 // Horizontal eval
-                boardScore += this.horizCheck(board, el, i, j);
+                boardScore += this.horizCheck(el, i, j);
                 // Vertical eval
-                boardScore += this.vertiCheck(board, el, i, j);
+                boardScore += this.vertiCheck(el, i, j);
                 // Horizontal eval
-                boardScore += this.upRightCheck(board, el, i, j);
+                boardScore += this.upRightCheck(el, i, j);
                 // Vertical eval
-                boardScore += this.downRightCheck(board, el, i, j);
+                boardScore += this.downRightCheck(el, i, j);
             });
         });
         return boardScore; 
@@ -248,12 +252,12 @@ class Maxaminion {
     //////////////////////////////////////////////////
     /*  Analyze value for four cell group.          */
     /*  Looking at element and three to the right.  */
-    horizCheck(board, el, row, col) {
+    horizCheck(el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
         if (col <= GAME._cols-4) {
             for (let i of [1, 2, 3]) {
-                let curr = board[row][col+i];
+                const curr = GAME.board[row][col+i];
                 if (emptyStreak) {
                     if (!curr) {
                         emptyStreak += 1;
@@ -288,12 +292,12 @@ class Maxaminion {
     //////////////////////////////////////////////
     /*  Analyze value for four cell group.      */
     /*  Looking at element and the three below. */
-    vertiCheck(board, el, row, col) {
+    vertiCheck(el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0;
         if (row <= GAME._rows - 4) {
             for (let i of [1, 2, 3]) {
-                let curr = board[row+i][col];
+                const curr = GAME.board[row+i][col];
                 if (emptyStreak) {
                     if (!curr) {
                         emptyStreak += 1;
@@ -326,12 +330,12 @@ class Maxaminion {
     ////////////////////////////////////////////////////////
     /*  Analyze value for four cell group.                */
     /*  Looking at element and three up and to the right. */
-    upRightCheck(board, el, row, col) {
+    upRightCheck(el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
         if (row > 2 && col <= GAME._cols-4) {
             for (let i of [1, 2, 3]) {
-                let curr = board[row-i][col+i];
+                const curr = GAME.board[row-i][col+i];
                 if (emptyStreak) {
                     if (!curr) {
                         emptyStreak += 1;
@@ -366,12 +370,12 @@ class Maxaminion {
     //////////////////////////////////////////////////////////
     /*  Analyze value for four cell group.                  */
     /*  Looking at element and three down and to the right. */
-    downRightCheck(board, el, row, col) {
+    downRightCheck(el, row, col) {
         let emptyStreak = el ? 0 : 1;
         let count = 0, endSpaceStreak = 0;
         if (row <= GAME._rows-4 && col <= GAME._cols-4) {
             for (let i of [1, 2, 3]) {
-                let curr = board[row+i][col+i];
+                const curr = GAME.board[row+i][col+i];
                 if (emptyStreak) {
                     if (!curr) {
                         emptyStreak += 1;
@@ -416,4 +420,4 @@ function shuffle(arr) {
 // return absolute value of number.
 function abs(val) {
     return val > 0 ? val : val * -1;
-}
+}    
