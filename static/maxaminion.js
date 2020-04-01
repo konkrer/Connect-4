@@ -152,8 +152,10 @@ class Maxaminion {
         }, [])
     }
 
-    /*  Place player 'piece' on board in given column. */
-    /*  Find first empty spot then break.              */
+    //////////////////////////////////////////////////////////
+    /*  Set player number in board in open spot in column.  */
+    /*  Decrement openRow value in openRowInCol Map.        */
+    /*  Return row index where player piece is now.         */
     placePieceInBoard(col, player) {
         const openRow = GAME.openRowInCol.get(col);
         // Decrement value for this column.

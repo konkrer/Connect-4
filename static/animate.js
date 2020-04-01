@@ -66,7 +66,7 @@ function animateFlipAllTops() {
                     ( GAME._aiPlayers==0 || (GAME._aiPlayers==1 && player===2) )
                     ) {
                         setTimeout(() => {             
-                            GAME.setBoardEvtListener();
+                            GAME.blockColClick = false;
                         }, GAME._dropDelay * 0.5);
                     }           
 

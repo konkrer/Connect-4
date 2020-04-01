@@ -15,11 +15,12 @@ class ConnectFour {
         this.openRowInCol = null;
         this.moves = null;
         this.player = 1;
+        this.blockColClick = false;
         this._dropDelay = 800;
         this._rows = 6;
         this._cols = 7;
         this._aiPlayers = 1;
-        this._currColumn = null;      
+        this._currColumn = null;  
         this.deltas = [
             [[-1,1], [-2,2], [-3,3]],
             [[0,1], [0,2], [0,3]],
@@ -28,6 +29,7 @@ class ConnectFour {
         ];     
         this.DOMBoardInit();
         this.initGame();
+        this.setBoardEvtListener();
     }
 
     /////////////////////////////////////////////////////
@@ -54,10 +56,13 @@ class ConnectFour {
         
         this.resetBoard();
         if (this._aiPlayers < 2) {
-            this.setBoardEvtListener();
+            this.blockColClick = false;
             this.resetPlayRate();
         }
-        else this.aiVsAiFirstMove();
+        else {
+            this.aiVsAiFirstMove();
+            this.blockColClick = true;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -73,36 +78,21 @@ class ConnectFour {
     //////////////////////////////////////////////////////////////
     /*  Listen for click on game board to place piece on board. */
     setBoardEvtListener() {
-        this.DOMBoard.addEventListener('click', this.setCurrCol);
-    }
-
-    /////////////////////////////////////////
-    /*  Remove board click event listener. */
-    removeBoardEvtListener() {
-        this.DOMBoard.removeEventListener('click', this.setCurrCol);
+        this.DOMBoard.addEventListener('click', this.setCurrCol.bind(this));
     }
 
     ////////////////////////////////////////////////////////////////////////////
     /*  Column click Logic.                                                   */
-    /*  Having "this" issues so setup is as it is, funky but it works for now.*/
     /*  If click was on any board column (element with a data-col attribute), */
-    /*  pass the column number to GAME object by setting property.            */
+    /*  set _currColumn and place piece.                                      */
     setCurrCol(e) {
+        if (this.blockColClick) return;
+
         const col = e.target.dataset['col'];
         if (col) {
-            GAME.currCol = +col;
+            this._currColumn = +col;
+            this.placePiece();
         } 
-    }
-
-    ////////////////////////////////////////////////////////////////
-    /*  Set _currColumn to column that was clicked on and passed  */
-    /*  in by game board event listener. Place piece.             */
-    /**
-     * @param {number} col
-     */
-    set currCol(col) {
-        this._currColumn = col;
-        this.placePiece();
     }
 
     /////////////////////////////////////////////////////
@@ -171,7 +161,7 @@ class ConnectFour {
         const places = this.alterBoard();
         if (places===-1) return;
 
-        this.removeBoardEvtListener();
+        this.blockColClick = true;
         this.moves--;
 
         animateDrop(this._currColumn, places);
