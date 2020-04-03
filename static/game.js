@@ -95,47 +95,6 @@ class ConnectFour {
         } 
     }
 
-    /////////////////////////////////////////////////////
-    /*  Set _rows to given value. Initalize new game.  */
-    /**
-     * @param {number} num
-     */
-    set rows(num) { 
-        this._rows = num;
-        this.DOMBoardInit();
-        this.initGame(); 
-    }
-
-    /////////////////////////////////////////////////////
-    /*  Set _cols to given value. Initalize new game.  */
-    /**
-     * @param {number} num
-     */
-    set cols(num) { 
-        this._cols = num;
-        this.DOMBoardInit();
-        this.initGame(); 
-    }
-
-    //////////////////////////////////////////////////////////
-    /*  Set _aiPlayers to given value. Initalize new game.  */
-    /**
-     * @param {number} num
-     */
-    set aiPlayers(num) { 
-        this._aiPlayers = num;
-        this.initGame(); 
-    }
-
-    //////////////////////////////////////
-    /*  Set _dropDelay to given value.  */
-    /**
-     * @param {number} num
-     */
-    set dropDelay(num) {
-        this._dropDelay = 1050 - num;
-    }
-
     ///////////////////////////////////////////////////////
     /*  Reset play rate to default when not AI vs. AI.  */
     resetPlayRate() {
@@ -303,21 +262,15 @@ class ConnectFour {
 
     ////////////////////////////////////////////////////////////////
     /*  Create block with black circle in center for grid board.  */
-    /*  This is inline-block with flex-box inside with            */
-    /*  black circle div inside.                                   */
+    /*  This is a inline-flex with black rounded div inside.      */
     createCuttoutBlock() {
         const cuttOutWrapper = document.createElement('div');
         cuttOutWrapper.classList.add('cuttout-wrapper');
 
-        const cuttOutWrapperFlx = document.createElement('div');
-        cuttOutWrapperFlx.classList.add('flx-std');
-        cuttOutWrapperFlx.classList.add('cuttout-wrapper-flex');
-
         const cuttOUt = document.createElement('div');
         cuttOUt.classList.add('cuttout');
 
-        cuttOutWrapperFlx.append(cuttOUt);
-        cuttOutWrapper.append(cuttOutWrapperFlx);
+        cuttOutWrapper.append(cuttOUt);
         return cuttOutWrapper;
     }
 
@@ -386,5 +339,46 @@ class ConnectFour {
         column.className = 'column';
         column.setAttribute('data-col', i);
         return column;
+    }
+
+    /////////////////////////////////////////////////////
+    /*  Set _rows to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set rows(num) { 
+        this._rows = num;
+        this.DOMBoardInit();
+        this.initGame(); 
+    }
+
+    /////////////////////////////////////////////////////
+    /*  Set _cols to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set cols(num) { 
+        this._cols = num;
+        this.DOMBoardInit();
+        this.initGame(); 
+    }
+
+    //////////////////////////////////////////////////////////
+    /*  Set _aiPlayers to given value. Initalize new game.  */
+    /**
+     * @param {number} num
+     */
+    set aiPlayers(num) { 
+        this._aiPlayers = num;
+        this.initGame(); 
+    }
+
+    //////////////////////////////////////
+    /*  Set _dropDelay to given value.  */
+    /**
+     * @param {number} num
+     */
+    set dropDelay(num) {
+        this._dropDelay = 1050 - num;
     }
 }

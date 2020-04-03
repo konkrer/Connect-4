@@ -192,13 +192,10 @@ main {
 .cuttout-wrapper {
     width: var(--piece-size);
     height: var(--piece-size);
-    display: inline-block;
+    display: inline-flex;
     margin: 0 var(--col-margin);
-}
-
-.cuttout-wrapper-flex {
-    width: var(--piece-size);
-    height: var(--piece-size);
+    justify-content: center;
+    align-items: center;
 }
 
 .cuttout {
