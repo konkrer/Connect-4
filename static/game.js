@@ -214,7 +214,7 @@ class ConnectFour {
     }
 
     //////////////////////////////////////////////
-    /*  Add corrent number of columns to board  */
+    /*  Set CSS variables based on properties.  */
     setCSSVariables() {
         let root = document.documentElement;
         root.style.setProperty('--number-rows', this._rows + 1);
@@ -319,15 +319,14 @@ class ConnectFour {
     ////////////////////////////////////////////////////////////
     /*  Make board piece HTML. Make with player side showing  */ 
     pieceFactory(col) {
-        let flipped = '';
-        if (this.player===2) flipped = 'flipped';
+        const flipped = this.player===2 ? 'flipped': '';
     
         return `<div class="piece-viewport opaque" data-col="${col}">
                     <div class="piece-wrapper flx-std">
-                    <div class="piece ${flipped}">
-                        <div class="front bg-red bdr-gold" data-col="${col}"></div>
-                        <div class="back bg-blue bdr-gold" data-col="${col}"></div>
-                    </div>
+                        <div class="piece ${flipped}">
+                            <div class="front bg-red bdr-gold" data-col="${col}"></div>
+                            <div class="back bg-blue bdr-gold" data-col="${col}"></div>
+                        </div>
                     </div>        
                 </div>`;
     }

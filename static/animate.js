@@ -67,7 +67,7 @@ function animateFlipAllTops() {
                     ) {
                         setTimeout(() => {             
                             GAME.blockColClick = false;
-                        }, GAME._dropDelay * 0.5);
+                        }, 500);
                     }           
 
             }, GAME._dropDelay * 0.03 * i);  
