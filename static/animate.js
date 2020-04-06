@@ -89,11 +89,9 @@ function animateWinningPieces(winner) {
 function animateArrows() {
 	return setTimeout(() => {
 		document.querySelector('.arrow-left').classList.add('shoot-arrow-left');
-		// document.querySelector('.arrow-left').classList.remove('display-none');           // workaround devtools if arrow issue.
-		document.querySelector('.arrow-right').classList.add('shoot-arrow-right'); // add display-none to left arrow class.
+		document.querySelector('.arrow-right').classList.add('shoot-arrow-right');
 		setTimeout(() => {
 			document.querySelector('.arrow-left').classList.remove('shoot-arrow-left');
-			// document.querySelector('.arrow-left').classList.add('display-none');          // workaround devtools if arrow issue.
 			document.querySelector('.arrow-right').classList.remove('shoot-arrow-right');
 		}, 6000);
 	}, 4250);
