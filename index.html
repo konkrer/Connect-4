@@ -1,220 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Connect 4</title>
-		<link rel="xr" href="" />
-		<link rel="shortcut icon" href="static/images/favicon.ico" />
-		<link rel="stylesheet" href="static/normalize.css" />
-		<link rel="stylesheet" href="static/utility.css" />
-		<link rel="stylesheet" href="app.css" />
-		<link rel="stylesheet" href="static/breakpoints.css" />
-		<link rel="stylesheet" href="static/animations.css" />
-		<link
-			href="https://fonts.googleapis.com/css?family=Gotu|Spicy+Rice&display=swap"
-			rel="stylesheet"
-		/>
-		<script defer src="./static/animate.js" type="text/javascript"></script>
-		<script defer src="./static/game.js" type="text/javascript"></script>
-		<script
-			defer
-			src="./static/maxaminion.js"
-			type="text/javascript"
-		></script>
-		<script defer src="./app.js" type="text/javascript"></script>
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect 4</title>
+    <link rel="xr" href="" />
+    <link rel="shortcut icon" href="static/images/favicon.ico" />
+    <link rel="stylesheet" href="static/normalize.css" />
+    <link rel="stylesheet" href="static/utility.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="static/breakpoints.css" />
+    <link rel="stylesheet" href="static/animations.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Gotu|Spicy+Rice&display=swap"
+      rel="stylesheet"
+    />
+    <script defer src="./static/animate.js" type="text/javascript"></script>
+    <script defer src="./static/game.js" type="text/javascript"></script>
+    <script defer src="./static/maxaminion.js" type="text/javascript"></script>
+    <script defer src="./app.js" type="text/javascript"></script>
+  </head>
 
-	<body>
-		<nav class="navbar">
-			<h2>
-				Connect <span class="red white-glow-outline font-1-2">4</span>
-			</h2>
-			<div class="navbar-flex">
-				<a href="https://konkrer.github.io" class="home-icon">
-					<img
-						src="static/images/home_cropped.png"
-						alt="home icon."
-						id="home-icon"
-						class="home-icon"
-					/>
-				</a>
-				<button class="start-btn">Restart Game</button>
-			</div>
-		</nav>
+  <body>
+    <nav class="navbar">
+      <h2>Connect <span class="red white-glow-outline font-1-2">4</span></h2>
+      <div class="navbar-flex">
+        <a href="https://konkrer.github.io" class="home-icon">
+          <img
+            src="static/images/home_cropped.png"
+            alt="home icon."
+            id="home-icon"
+            class="home-icon"
+          />
+        </a>
+        <button class="start-btn">Restart Game</button>
+      </div>
+    </nav>
 
-		<menu class="settings-zone">
-			<div>
-				<img
-					src="./static/images/gearbox.png"
-					alt="Gear icon."
-					id="settings-gear1"
-				/>
-			</div>
-			<div class="settings-panel hidden opaque">
-				<fieldset>
-					<p>Columns</p>
+    <menu class="settings-zone">
+      <div>
+        <img
+          src="./static/images/gearbox.png"
+          alt="Gear icon."
+          id="settings-gear1"
+        />
+      </div>
+      <div class="settings-panel hidden opaque">
+        <fieldset>
+          <p>Columns</p>
 
-					<label for="cols-7">7</label>
-					<input
-						type="radio"
-						name="cols"
-						id="cols-7"
-						value="7"
-						checked
-					/>
-					<label for="cols-8">8</label>
-					<input type="radio" name="cols" id="cols-8" value="8" />
-					<label for="cols-9">9</label>
-					<input type="radio" name="cols" id="cols-9" value="9" />
+          <label for="cols-7">7</label>
+          <input type="radio" name="cols" id="cols-7" value="7" checked />
+          <label for="cols-8">8</label>
+          <input type="radio" name="cols" id="cols-8" value="8" />
+          <label for="cols-9">9</label>
+          <input type="radio" name="cols" id="cols-9" value="9" />
 
-					<p>Rows</p>
+          <p>Rows</p>
 
-					<label for="rows-6">6</label>
-					<input
-						type="radio"
-						name="rows"
-						id="rows-6"
-						value="6"
-						checked
-					/>
-					<label for="rows-7">7</label>
-					<input type="radio" name="rows" id="rows-7" value="7" />
-					<label for="rows-8">8</label>
-					<input type="radio" name="rows" id="rows-8" value="8" />
-					<label for="rows-9">9</label>
-					<input type="radio" name="rows" id="rows-9" value="9" />
+          <label for="rows-6">6</label>
+          <input type="radio" name="rows" id="rows-6" value="6" checked />
+          <label for="rows-7">7</label>
+          <input type="radio" name="rows" id="rows-7" value="7" />
+          <label for="rows-8">8</label>
+          <input type="radio" name="rows" id="rows-8" value="8" />
+          <label for="rows-9">9</label>
+          <input type="radio" name="rows" id="rows-9" value="9" />
 
-					<p>AI Settings</p>
-					<label for="ai-off">Off</label>
-					<input
-						type="radio"
-						name="ai-players"
-						id="ai-off"
-						value="0"
-					/>
-					<label for="ai-on">On</label>
-					<input
-						type="radio"
-						name="ai-players"
-						id="ai-on"
-						value="1"
-						checked
-					/>
-					<label for="ai-vs-ai">AI vs. AI</label>
-					<input
-						type="radio"
-						name="ai-players"
-						id="ai-vs-ai"
-						value="2"
-					/>
+          <p>AI Settings</p>
+          <label for="ai-off">Off</label>
+          <input type="radio" name="ai-players" id="ai-off" value="0" />
+          <label for="ai-on">On</label>
+          <input type="radio" name="ai-players" id="ai-on" value="1" checked />
+          <label for="ai-vs-ai">AI vs. AI</label>
+          <input type="radio" name="ai-players" id="ai-vs-ai" value="2" />
 
-					<div id="ai-1-zone">
-						<p>AI Opponent (blue)</p>
-						<label for="ai-random">Junior</label>
-						<input
-							type="radio"
-							name="ai-algo"
-							id="ai-random"
-							value="1"
-						/>
-						<label for="ai-max">Maximinion</label>
-						<input
-							type="radio"
-							name="ai-algo"
-							id="ai-max"
-							value="2"
-							checked
-						/>
-						<br />
-						<label for="depth">AI Depth</label>
-						<input
-							type="number"
-							name="depth"
-							id="depth"
-							value="5"
-							min="1"
-							max="10"
-						/>
-					</div>
+          <div id="ai-1-zone">
+            <p>AI Opponent (blue)</p>
+            <label for="ai-random">Junior</label>
+            <input type="radio" name="ai-algo" id="ai-random" value="1" />
+            <label for="ai-max">Maximinion</label>
+            <input type="radio" name="ai-algo" id="ai-max" value="2" checked />
+            <br />
+            <label for="depth">AI Depth</label>
+            <input
+              type="number"
+              name="depth"
+              id="depth"
+              value="5"
+              min="1"
+              max="10"
+            />
+          </div>
 
-					<div class="display-none" id="ai-2-zone">
-						<p>AI Two (red)</p>
-						<label for="ai-2-random">Junior</label>
-						<input
-							type="radio"
-							name="ai-algo-2"
-							id="ai-2-random"
-							value="1"
-						/>
-						<label for="ai-2-max">Maximinion</label>
-						<input
-							type="radio"
-							name="ai-algo-2"
-							id="ai-2-max"
-							value="2"
-							checked
-						/>
-						<br />
-						<label for="depth2">AI Depth</label>
-						<input
-							type="number"
-							name="depth2"
-							id="depth2"
-							value="5"
-							min="1"
-							max="10"
-						/>
-						<br />
-						<label for="drop-delay">Play Rate</label>
-						<input
-							type="range"
-							id="drop-delay"
-							name="drop-delay"
-							min="50"
-							max="1000"
-							value="150"
-						/>
-					</div>
-				</fieldset>
-				<div class="flx-std swatch-zone">
-					<div class="swatch" id="swatch1"></div>
-					<div class="swatch" id="swatch2"></div>
-					<div class="swatch" id="swatch3"></div>
-					<div class="swatch" id="swatch4"></div>
-					<div class="swatch" id="swatch5"></div>
-				</div>
-				<div class="flx-std board-type-zone">
-					<img
-						src="./static/images/spots_board.png"
-						alt="img board with spots for pieces"
-						id="board-grid-icon"
-					/>
-					<img
-						src="./static/images/columns.png"
-						alt="img board with columns"
-						id="board-columns-icon"
-					/>
-				</div>
-			</div>
-		</menu>
+          <div class="display-none" id="ai-2-zone">
+            <p>AI Two (red)</p>
+            <label for="ai-2-random">Junior</label>
+            <input type="radio" name="ai-algo-2" id="ai-2-random" value="1" />
+            <label for="ai-2-max">Maximinion</label>
+            <input
+              type="radio"
+              name="ai-algo-2"
+              id="ai-2-max"
+              value="2"
+              checked
+            />
+            <br />
+            <label for="depth2">AI Depth</label>
+            <input
+              type="number"
+              name="depth2"
+              id="depth2"
+              value="5"
+              min="1"
+              max="10"
+            />
+            <br />
+            <label for="drop-delay">Play Rate</label>
+            <input
+              type="range"
+              id="drop-delay"
+              name="drop-delay"
+              min="50"
+              max="1000"
+              value="150"
+            />
+          </div>
+        </fieldset>
+        <p>Apperance</p>
+        <div class="flx-std swatch-zone">
+          <div class="swatch" id="swatch1"></div>
+          <div class="swatch" id="swatch2"></div>
+          <div class="swatch" id="swatch3"></div>
+          <div class="swatch" id="swatch4"></div>
+          <div class="swatch" id="swatch5"></div>
+        </div>
+        <div class="flx-std board-type-zone">
+          <img
+            src="./static/images/spots_board.png"
+            alt="img board with spots for pieces"
+            id="board-grid-icon"
+          />
+          <img
+            src="./static/images/columns.png"
+            alt="img board with columns"
+            id="board-columns-icon"
+          />
+        </div>
+      </div>
+    </menu>
 
-		<main class="flx-std board"></main>
+    <main class="flx-std board"></main>
 
-		<div class="arrow-wrapper">
-			<div class="arrow arrow-right"></div>
-			<div class="arrow arrow-left"></div>
-		</div>
-		
-		<!-- add display none for dev-tools issue -->
+    <div class="arrow-wrapper">
+      <div class="arrow arrow-right"></div>
+      <div class="arrow arrow-left"></div>
+    </div>
 
-		<div class="game-over-wrapper hidden">
-			<div class="game-over flx-std">
-				<div class="game-over-text white-glow">
-					<div>GAME OVER!</div>
-					<div id="winner"></div>
-				</div>
-			</div>
-		</div>
-	</body>
+    <!-- add display none for dev-tools issue -->
+
+    <div class="game-over-wrapper hidden">
+      <div class="game-over flx-std">
+        <div class="game-over-text white-glow">
+          <div>GAME OVER!</div>
+          <div id="winner"></div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
