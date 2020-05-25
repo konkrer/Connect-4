@@ -46,8 +46,8 @@
 }
 
 .white-glow {
-  text-shadow: 0.06em 0.06em 0.06em white, -0.06em 0.06em 0.06em white,
-    0.06em -0.06em 0.06em white, -0.06em -0.06em 0.06em white;
+  text-shadow: 0.06em 0.06em 0.06em lightgray, -0.06em 0.06em 0.06em lightgray,
+    0.06em -0.06em 0.06em lightgray, -0.06em -0.06em 0.06em lightgray;
 }
 
 .font-1-3 {
