@@ -4,4 +4,4 @@ Connect four game with AI second player, AI vs. AI, or two player game mode. Use
 
 live at https://konkrer.github.io/Connect-4/
 
-![website image of meme generator](https://repository-images.githubusercontent.com/249830407/a8411a00-a02e-11ea-8330-af976ab9a08e)
+![website image of meme generator](https://repository-images.githubusercontent.com/249830407/0673fa00-a03b-11ea-8e2f-6d5b784bccf9)
