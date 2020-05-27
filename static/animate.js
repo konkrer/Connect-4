@@ -127,13 +127,15 @@ function fillInWinnerDOM(winBool) {
   // If there was a winner make text announcing winner.
   if (winBool) {
     colorClass = GAME.player === 1 ? 'red' : 'blue';
-    html = `<div>${colorClass.toUpperCase()} PLAYER</div> <div>WINS!!!</div>`;
+    html = `<div>${[...colorClass]
+      .map((e, i) => (i === 0 ? e.toUpperCase() : e))
+      .join('')} Player Wins!!!</div>`;
   } else {
     html = "IT'S A TIE!";
     colorClass = 'green';
   }
   winnerDiv.innerHTML = html;
-  winnerDiv.className = colorClass;
+  winnerDiv.classList.add(colorClass);
 }
 
 // Fuction to tell if board has acutally been cleared

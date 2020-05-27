@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="static/breakpoints.css" />
     <link rel="stylesheet" href="static/animations.css" />
     <link
-      href="https://fonts.googleapis.com/css?family=Gotu|Spicy+Rice&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Changa+One:ital@1&family=Gotu&display=swap"
       rel="stylesheet"
     />
     <script defer src="./static/animate.js" type="text/javascript"></script>
@@ -23,7 +23,9 @@
 
   <body>
     <nav class="navbar">
-      <h2>Connect <span class="red white-glow-outline font-1-2">4</span></h2>
+      <h1 class="black-text-outline">
+        Connect <span class="red white-text-outline font-1-2">4</span>
+      </h1>
       <div class="navbar-flex">
         <a href="https://konkrer.github.io" class="home-icon">
           <img
@@ -106,7 +108,7 @@
               checked
             />
             <br />
-            <label for="depth2">AI Depth</label>
+            <label for="depth2">AI Depth (difficulty)</label>
             <input
               type="number"
               name="depth2"
@@ -127,7 +129,7 @@
             />
           </div>
         </fieldset>
-        <p>Apperance</p>
+        <p>Appearance</p>
         <div class="flx-std swatch-zone">
           <div class="swatch" id="swatch1"></div>
           <div class="swatch" id="swatch2"></div>
@@ -161,9 +163,9 @@
 
     <div class="game-over-wrapper hidden">
       <div class="game-over flx-std">
-        <div class="game-over-text white-glow">
-          <div>GAME OVER!</div>
-          <div id="winner"></div>
+        <div class="white-glow">
+          <div class="game-over-heading">GAME OVER!</div>
+          <div id="winner" class="game-over-text"></div>
         </div>
       </div>
     </div>

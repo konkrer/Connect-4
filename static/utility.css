@@ -40,14 +40,19 @@
   border: gold 1px solid;
 }
 
-.white-glow-outline {
-  text-shadow: 1px 1px 1px white, -1px 1px 1px white, 1px -1px 1px white,
-    -1px -1px 1px white;
+.white-text-outline {
+  text-shadow: 2px 2px 4px white, -2px 2px 4px white, 2px -2px 4px white,
+    -2px -2px 4px white;
 }
 
 .white-glow {
   text-shadow: 0.06em 0.06em 0.06em lightgray, -0.06em 0.06em 0.06em lightgray,
     0.06em -0.06em 0.06em lightgray, -0.06em -0.06em 0.06em lightgray;
+}
+
+.black-text-outline {
+  text-shadow: 2px 2px 1px black, -2px 2px 1px black, 2px -2px 1px black,
+    -2px -2px 1px black;
 }
 
 .font-1-3 {
