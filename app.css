@@ -247,6 +247,7 @@ main {
   border-radius: 50%;
   position: absolute;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .front {
