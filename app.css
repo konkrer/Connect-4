@@ -337,10 +337,10 @@ main {
 
 .game-over-heading {
   font-family: 'Changa One', sans-serif;
-  font-size: calc(var(--piece-size) * 1);
+  font-size: calc(var(--piece-size) * 0.9);
 }
 
 .game-over-text {
   font-family: 'Gotu', sans-serif;
-  font-size: calc(var(--piece-size) * 0.6);
+  font-size: calc(var(--piece-size) * 0.5);
 }
