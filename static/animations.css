@@ -135,9 +135,6 @@
 }
 @keyframes slideGOverDown {
   0% {
-    top: calc(
-      var(--navbar-height) + calc(calc(100vh - var(--navbar-height)) * 0.15)
-    );
   }
   50% {
     top: calc(
