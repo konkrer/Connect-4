@@ -188,7 +188,10 @@ main {
   height: calc(105% - var(--piece-size));
   top: var(--piece-size);
   left: 0;
-  border-radius: 5px;
+  border-radius: 15px;
+  box-shadow: 0px -1px 1px rgb(102, 102, 102), -1px 0px 1px rgb(102, 102, 102),
+    0px -20px 1px black, 2px 2px 7px inset rgb(0, 0, 0),
+    -2px -2px 7px inset rgb(0, 0, 0);
 }
 
 .grid-row {
@@ -209,7 +212,7 @@ main {
   height: 88%;
   background-color: black;
   border-radius: 50%;
-  box-shadow: rgb(143, 120, 120) -1px -1px 0px inset;
+  box-shadow: rgb(143, 120, 120) -1px -1px 2px inset;
 }
 
 .piece-viewport {
@@ -261,10 +264,10 @@ main {
   transform: rotateY(0.5turn);
   border: groove calc(var(--piece-size) / 5) rgb(38, 0, 255);
   border-radius: 100% 1000% / 10% 120%;
-  box-shadow: rgb(116, 124, 0) 1px 1px 3px inset,
-    rgb(116, 124, 0) -1px -2px 3px inset, rgb(116, 124, 0) -1px -1px 0px,
-    rgb(116, 124, 0) -1px -1px 0px, rgb(116, 124, 0) -1px 1px 0px,
-    rgb(116, 124, 0) 1px 1px 0px;
+  box-shadow: rgb(149, 160, 0) 1px 1px 3px inset,
+    rgb(149, 160, 0) -1px -2px 3px inset, rgb(149, 160, 0) -1px -1px 0px,
+    rgb(149, 160, 0) -1px -1px 0px, rgb(149, 160, 0) -1px 1px 0px,
+    rgb(149, 160, 0) 1px 1px 0px;
 }
 
 .arrow-wrapper {

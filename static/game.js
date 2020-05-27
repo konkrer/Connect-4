@@ -15,7 +15,7 @@ class ConnectFour {
     this.moves = null;
     this.player = 1;
     this.blockColClick = false;
-    this._dropDelay = 500;
+    this._dropDelay = 430;
     this._rows = 6;
     this._cols = 7;
     this._aiPlayers = 1;
@@ -114,8 +114,8 @@ class ConnectFour {
   ///////////////////////////////////////////////////////
   /*  Reset play rate to default when not AI vs. AI.  */
   resetPlayRate() {
-    this._dropDelay = 800;
-    document.querySelector('#drop-delay').value = 250;
+    this._dropDelay = 430;
+    document.querySelector('#drop-delay').value = 650;
   }
 
   //////////////////////////////////
