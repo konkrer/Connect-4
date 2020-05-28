@@ -212,7 +212,7 @@ main {
   height: 88%;
   background-color: rgb(71, 55, 33);
   border-radius: 50%;
-  box-shadow: rgb(143, 120, 120) -1px -1px 2px inset;
+  box-shadow: rgb(143, 120, 120) -1px -1px 0px inset;
 }
 
 .piece-viewport {
@@ -253,12 +253,15 @@ main {
 .front {
   border: groove calc(var(--piece-size) / 5) rgb(187, 0, 16);
   border-radius: 47% 49% / 50% 45%;
-  border-width: calc(var(--piece-size) / 8) calc(var(--piece-size) / 5)
-    calc(var(--piece-size) / 4.5) calc(var(--piece-size) / 4);
-  box-shadow: rgb(158, 78, 31) 1px 0px 3px inset,
-    rgb(250, 123, 49) 0px 1px 1px inset, rgb(158, 78, 31) -1px -2px 3px inset,
+  border-width: calc(var(--piece-size) / 14) calc(var(--piece-size) / 7.5)
+    calc(var(--piece-size) / 6) calc(var(--piece-size) / 7);
+  box-shadow: rgb(207, 100, 38) 2px 0px 4px inset,
+    rgb(207, 100, 38) 0px 2px 2px inset, rgb(158, 78, 31) -1px -2px 3px inset,
     rgb(12, 12, 12) -1px -1px 0px, rgb(12, 12, 12) -1px -1px 0px,
     rgb(12, 12, 12) -1px 1px 0px, rgb(12, 12, 12) 1px 1px 0px;
+  background: url('https://media.giphy.com/media/6wpHEQNjkd74Q/giphy.gif');
+  background-size: cover;
+  background-position: bottom;
 }
 
 .back {
@@ -269,6 +272,9 @@ main {
     rgb(149, 160, 0) -1px -2px 3px inset, rgb(149, 160, 0) -1px -1px 0px,
     rgb(149, 160, 0) -1px -1px 0px, rgb(149, 160, 0) -1px 1px 0px,
     rgb(149, 160, 0) 1px 1px 0px;
+  background: url('https://media.giphy.com/media/11gCk8FT8lzRIc/giphy.gif');
+  background-size: cover;
+  background-position: right;
 }
 
 .arrow-wrapper {

@@ -135,6 +135,7 @@ function fillInWinnerDOM(winBool) {
     colorClass = 'green';
   }
   winnerDiv.innerHTML = html;
+  winnerDiv.classList.remove('red', 'blue', 'green');
   winnerDiv.classList.add(colorClass);
 }
 
