@@ -48,7 +48,7 @@ class Maxaminion {
 
     let bestDepth = depth;
     openColumns = shuffle(openColumns);
-    let bestMove = this.getBestMove(openColumns, depth, maximizing);
+    let [bestMove, block] = this.getBestMove(openColumns, depth, maximizing);
 
     if (maximizing) {
       let bestValue = -Infinity;
@@ -72,9 +72,13 @@ class Maxaminion {
           bestValue = evalValue;
           bestMove = col;
           bestDepth = newDepth;
-          // More depth allows for longer play / chance for human to err.
         } else if (
-          evalValue !== -Infinity &&
+          // More depth allows for longer play / chance for human to err.
+          // Select for greater depth if eval scores are equal.
+          // But, if eval shows other player wins and there is a blocking
+          // move, don't set anything her. This is so if all column moves
+          // lead to the other player winning a blocking move will be used.
+          (evalValue !== -Infinity || (evalValue === -Infinity && !block)) &&
           evalValue === bestValue &&
           newDepth < bestDepth
         ) {
@@ -109,9 +113,13 @@ class Maxaminion {
         bestValue = evalValue;
         bestMove = col;
         bestDepth = newDepth;
-        // More depth allows for longer play / chance for human to err.
       } else if (
-        evalValue !== Infinity &&
+        // More depth allows for longer play / chance for human to err.
+        // Select for greater depth if eval scores are equal.
+        // But, if eval shows other player wins and there is a blocking
+        // move, don't set anything her. This is so if all column moves
+        // lead to the other player winning a blocking move will be used.
+        (evalValue !== Infinity || (evalValue === Infinity && !block)) &&
         evalValue === bestValue &&
         newDepth < bestDepth
       ) {
@@ -193,11 +201,11 @@ class Maxaminion {
       for (let col of openCols) {
         const openRow = GAME.openRowInCol.get(col);
         if (this.checkForBlock(openRow, col)) {
-          return col;
+          return [col, true];
         }
       }
     }
-    return openCols[0];
+    return [openCols[0], false];
   }
 
   //////////////////////////////////////////////////////////
