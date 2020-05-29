@@ -9,6 +9,21 @@ function animateDrop(col, places) {
   // Drop piece and spin it on the way down.
   topPieceViewport.classList.add('drop-piece');
   topPieceViewport.firstElementChild.classList.add('fall-flip');
+  // Make falling flipping piece only show current player's sides of piece.
+  // Hide the oppisite side and change backface visibility to visible for the drop.
+  if (GAME.player === 1) {
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.classList.add(
+      'hidden'
+    );
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.style.backfaceVisibility =
+      'visible';
+  } else {
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.add(
+      'hidden'
+    );
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.style.backfaceVisibility =
+      'visible';
+  }
 
   const newPiece = GAME.pieceFactory(col);
 
@@ -21,6 +36,17 @@ function animateDrop(col, places) {
     // Remove animation classes from dropped piece.
     topPieceViewport.classList.remove('drop-piece');
     topPieceViewport.firstElementChild.classList.remove('fall-flip');
+    // remove style and classes for hiding/showing sides of piece.
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.classList.remove(
+      'hidden'
+    );
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.remove(
+      'hidden'
+    );
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.style =
+      '';
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.style =
+      '';
     // Add new piece to column.
     topPieceViewport.parentElement.innerHTML += newPiece;
     // While column is not yet full of pieces fade new piece in.

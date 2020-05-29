@@ -7,11 +7,11 @@
   --number-rows: 7;
   --number-cols: 7;
   --piece-size: calc(100vh / calc(var(--number-rows) + 3));
+  --display-text-size: calc(100vh / 10);
   --col-margin: calc(var(--piece-size) * 0.05);
   --navbar-height: 50px;
   --settings-button: 76px;
   --settings-panel-width: 250px;
-
   --column-bg: linear-gradient(#480093, rgba(0, 255, 150, 0.3));
 }
 
@@ -92,7 +92,7 @@ body {
 }
 
 .settings-panel {
-  top: calc(var(--settings-panel-width) * -0.7);
+  top: calc(var(--settings-panel-width) * -1);
   left: calc(var(--settings-button) + 0.6em);
   width: var(--settings-panel-width);
   display: inline-block;
@@ -114,6 +114,7 @@ menu p {
 menu input[type='number'] {
   margin-top: 0.4em;
   max-width: calc(var(--settings-panel-width) * 0.2);
+  border-radius: 7px;
 }
 
 .swatch {
@@ -336,7 +337,7 @@ main {
   border-width: 1.5em 0.4em;
   background-color: rgba(255, 0, 0, 0.95);
   text-align: center;
-  font-size: calc(var(--piece-size) * 0.8);
+  font-size: calc(var(--display-text-size) * 0.8);
   box-shadow: 0px 20px 30px lightgray, -5px 0px 7px lightgray,
     0px -20px 30px lightgray, 5px 0px 7px lightgray,
     2px 2px 10px inset rgb(0, 0, 0), -2px -2px 10px inset rgb(0, 0, 0);
@@ -344,10 +345,10 @@ main {
 
 .game-over-heading {
   font-family: 'Changa One', sans-serif;
-  font-size: calc(var(--piece-size) * 0.9);
+  font-size: calc(var(--display-text-size) * 0.9);
 }
 
 .game-over-text {
   font-family: 'Gotu', sans-serif;
-  font-size: calc(var(--piece-size) * 0.5);
+  font-size: calc(var(--display-text-size) * 0.5);
 }

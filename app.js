@@ -196,5 +196,5 @@ function changeBoardType(e) {
 document
   .querySelector('.game-over-wrapper')
   .addEventListener('click', function (e) {
-    this.classList.add('animate-clear-g-over');
+    GAME.clearGameOverPlacard();
   });

@@ -10,6 +10,7 @@ class ConnectFour {
     this.aiTimeouts = [null, null];
     this.flipAllTimer = null;
     this.gameOverAnimations = [null, null];
+    this.aiPlayersChangeTimer = null;
     this.board = null;
     this.openRowInCol = null;
     this.moves = null;
@@ -116,6 +117,10 @@ class ConnectFour {
   resetPlayRate() {
     this._dropDelay = 430;
     document.querySelector('#drop-delay').value = 650;
+    document.documentElement.style.setProperty(
+      '--drop-delay',
+      `${this._dropDelay}ms`
+    );
   }
 
   //////////////////////////////////
@@ -388,14 +393,28 @@ class ConnectFour {
     this.initGame();
   }
 
-  //////////////////////////////////////////////////////////
-  /*  Set _aiPlayers to given value. Initalize new game.  */
+  /////////////////////////////////////
+  /*  Set _aiPlayers to given value. */
   /**
    * @param {number} num
    */
   set aiPlayers(num) {
+    clearTimeout(this.aiPlayersChangeTimers);
+    clearTimeout(this.aiTimeouts);
     this._aiPlayers = num;
-    this.initGame();
+    this.resetPlayRate();
+    this.aiPlayersChangeTimers = setTimeout(() => {
+      if (this._aiPlayers === 1 && this.player == 2) this.makeAIMove();
+      if (this._aiPlayers === 2) {
+        // if ai's are already active from quick flip from
+        // one to two ai's don't make ai move. If moves
+        // is not chaging make ai move.
+        let temp = this.moves;
+        setTimeout(() => {
+          if (this.moves === temp) this.makeAIMove();
+        }, 2 * this._dropDelay);
+      }
+    }, 4 * this._dropDelay);
   }
 
   //////////////////////////////////////
@@ -406,4 +425,51 @@ class ConnectFour {
   set dropDelay(num) {
     this._dropDelay = 1050 - num;
   }
+
+  //////////////////////////////////////
+  /*  Setup test board. Manual debug. */
+  /**/
+  async setBoard() {
+    this.aiPlayers = 0;
+    this.initGame();
+    this._dropDelay = 50;
+    const moveList = [
+      3,
+      6,
+      3,
+      6,
+      3,
+      6,
+      2,
+      4,
+      4,
+      4,
+      2,
+      4,
+      2,
+      4,
+      4,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      3,
+      2,
+      3,
+      3,
+      2,
+      6,
+    ];
+    for (let col of moveList) {
+      this._currColumn = col;
+      this.placePiece();
+      await sleep(0.07);
+    }
+  }
+}
+
+function sleep(sec) {
+  return new Promise(resolve => setTimeout(resolve, sec * 1000));
 }
