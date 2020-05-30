@@ -29,8 +29,8 @@ settings.addEventListener('click', toggleSettingsPanel);
 
 // Allow mouseover to keep settings panel open.
 const settingsPanel = document.querySelector('.settings-panel');
-settingsPanel.addEventListener('mouseover', clearSettingPanelTimeout);
-settingsPanel.addEventListener('mouseout', refreshSettingPanelTimeout);
+// settingsPanel.addEventListener('mouseover', clearSettingPanelTimeout);
+// settingsPanel.addEventListener('mouseout', refreshSettingPanelTimeout);
 
 // timer id for settings panel timeout.
 let settingsPanelTimer;
@@ -40,9 +40,9 @@ function toggleSettingsPanel(e) {
   if (settingsPanel.classList.contains('hidden')) {
     settingsPanel.classList.remove('hidden');
     settingsPanel.classList.remove('opaque');
-    refreshSettingPanelTimeout();
+    // refreshSettingPanelTimeout();
   } else {
-    clearTimeout(settingsPanelTimer);
+    // clearTimeout(settingsPanelTimer);
     settingsPanel.classList.add('opaque');
     setTimeout(() => {
       settingsPanel.classList.add('hidden');
