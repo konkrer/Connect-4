@@ -11,214 +11,9 @@ class Maxaminion {
     // These settings are for player 1 the red AI player (AI vs. AI).
     this._depth2 = 5;
     this._algo2 = this.aiLogic1;
-  }
-
-  /////////////////////////////////////////////////
-  /*  Return the column move the AI makes. This  */
-  /*  function is for game object to call.       */
-  /*  Player one is the maximizing player.       */
-  getMove() {
-    const maximizing = GAME.player === 1 ? true : false;
-    const depth = GAME.player === 1 ? this._depth2 : this._depth;
-    const algo =
-      GAME.player === 1 ? this._algo2.bind(this) : this._algo.bind(this);
-
-    return this.minimax(maximizing, depth, -Infinity, Infinity, algo)[1];
-  }
-
-  //////////////////////////////////////////////////
-  /*  Minimax algorithm with alpha beta prunning  */
-  /*  and recursion depth limit. Adapted from the */
-  /*  codecademy ML minimax unit connect four.    */
-  /*  Return array is [ evalValue, move, depth ]. */
-  minimax(maximizing, depth, alpha, beta, algo) {
-    // Check for game-over conditions. See if the last player won
-    // or board is full.
-    let winnerEval = this.checkForWinner(!maximizing);
-    let openColumns = this.getOpenColumns();
-    // If there was a winner or there are no open spaces on board return data.
-    if (winnerEval || openColumns.length === 0) {
-      // If there was no winner winnerEval is False board was full.
-      //  winnerEval is set to zero as it was a tie.
-      winnerEval = !winnerEval ? 0 : winnerEval;
-      return [winnerEval, '', depth];
-    }
-    // If depth is zero evaluate board.
-    if (depth === 0) return [algo(), '', depth];
-
-    let bestDepth = depth;
-    openColumns = shuffle(openColumns);
-    let [bestMove, block] = this.getBestMove(openColumns, depth, maximizing);
-
-    if (maximizing) {
-      let bestValue = -Infinity;
-      for (let col of openColumns) {
-        // Place piece in col note the row piece was placed into.
-        const idxRow = this.placePieceInBoard(col, 1);
-        // Recursive call.
-        const [evalValue, , newDepth] = this.minimax(
-          // input values
-          false,
-          depth - 1,
-          alpha,
-          beta,
-          algo
-        );
-        // Backtrack board and openRowinCol state.
-        GAME.board[idxRow][col] = 0;
-        GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
-        //  maximizing player looks for the highes eval number.
-        if (evalValue > bestValue) {
-          bestValue = evalValue;
-          bestMove = col;
-          bestDepth = newDepth;
-        } else if (
-          // More depth allows for longer play / chance for human to err.
-          // Select for greater depth if eval scores are equal.
-          // But, if eval shows other player wins and there is a blocking
-          // move, don't set anything her. This is so if all column moves
-          // lead to the other player winning a blocking move will be used.
-          (evalValue !== -Infinity || (evalValue === -Infinity && !block)) &&
-          evalValue === bestValue &&
-          newDepth < bestDepth
-        ) {
-          bestMove = col;
-          bestDepth = newDepth;
-        }
-        // Prune.
-        alpha = Math.max(alpha, bestValue);
-        if (alpha >= beta) break;
-      }
-      return [bestValue, bestMove, bestDepth];
-    }
-    // minimizing
-    let bestValue = Infinity;
-    for (let col of openColumns) {
-      // Place piece in col note row piece placed into.
-      const idxRow = this.placePieceInBoard(col, 2);
-      // Recursive call.
-      const [evalValue, , newDepth] = this.minimax(
-        // input values
-        true,
-        depth - 1,
-        alpha,
-        beta,
-        algo
-      );
-      // Backtrack board and openRowinCol state.
-      GAME.board[idxRow][col] = 0;
-      GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
-      //  minimizing player looks for the lowest eval number.
-      if (evalValue < bestValue) {
-        bestValue = evalValue;
-        bestMove = col;
-        bestDepth = newDepth;
-      } else if (
-        // More depth allows for longer play / chance for human to err.
-        // Select for greater depth if eval scores are equal.
-        // But, if eval shows other player wins and there is a blocking
-        // move, don't set anything her. This is so if all column moves
-        // lead to the other player winning a blocking move will be used.
-        (evalValue !== Infinity || (evalValue === Infinity && !block)) &&
-        evalValue === bestValue &&
-        newDepth < bestDepth
-      ) {
-        bestMove = col;
-        bestDepth = newDepth;
-      }
-      // Prune.
-      beta = Math.min(beta, bestValue);
-      if (beta <= alpha) break;
-    }
-    return [bestValue, bestMove, bestDepth];
-  }
-
-  /////////////////////////////////////////////
-  /*  Check board for four pieces in a row.    */
-  /*  Return evaluation value appropriate for  */
-  /*  the winning player if a player has won.  */
-  checkForWinner(maximizing) {
-    const player = maximizing ? 1 : 2;
-    let winnerEval = false;
-    // For each row-
-    GAME.board.forEach((row, i) => {
-      // Check each element.
-      row.forEach((el, j) => {
-        // If piece is here-
-        if (el === player) {
-          // For each delta group --> up-right, right, down-right, down-
-          for (let delta of GAME.deltas) {
-            if (
-              // If every piece is this player's they have won.
-              delta.every(([dy, dx]) => {
-                // If delta offset found valid row-
-                if (GAME.board[i + dy]) {
-                  // check if cell value matches current element.
-                  return GAME.board[i + dy][j + dx] === el;
-                }
-                return false;
-              }) // If win set eval value for return.
-            )
-              winnerEval = el === 1 ? Infinity : -Infinity;
-          }
-        }
-      });
-    });
-    return winnerEval;
-  }
-
-  ///////////////////////////////////////////////////
-  /*  Return list of game board columns with empty  /
-    /*  spots for game pieces to be placed into.    */
-  getOpenColumns() {
-    return GAME.board[0].reduce((acc, el, i) => {
-      if (el === 0) acc.push(i);
-      return acc;
-    }, []);
-  }
-
-  //////////////////////////////////////////////////////////
-  /*  Set player number in board in open spot in column.  */
-  /*  Decrement openRow value in openRowInCol Map.        */
-  /*  Return row index where player piece is now.         */
-  placePieceInBoard(col, player) {
-    const openRow = GAME.openRowInCol.get(col);
-    // Decrement value for this column.
-    GAME.openRowInCol.set(col, openRow - 1);
-    GAME.board[openRow][col] = player;
-    return openRow;
-  }
-
-  /////////////////////////////////////////////////////
-  /*  Get random best move (idx 0) or blocking move. */
-  /*  If called at top level of minimax recursion    */
-  /*  pick blocking move as best move if any block.  */
-  getBestMove(openCols, depth, maximizing) {
-    if (
-      (maximizing && depth === this._depth2) ||
-      (!maximizing && depth === this._depth)
-    ) {
-      for (let col of openCols) {
-        const openRow = GAME.openRowInCol.get(col);
-        if (this.checkForBlock(openRow, col)) {
-          return [col, true];
-        }
-      }
-    }
-    return [openCols[0], false];
-  }
-
-  //////////////////////////////////////////////////////////
-  /*  Check if putting a piece at y, x in board will      */
-  /*  block a winning play. If three of opponents pieces  */
-  /*  and one of players in a relevant delta group a      */
-  /*  block happened. Return true or false.               */
-  checkForBlock(y, x) {
-    // set player in board temporarily.
-    GAME.board[y][x] = GAME.player;
     // These are delta offsets from current position to allow corresponding GAME.deltas
-    // to check all relevant groups looking to see if a block happened.
-    const deltas = [
+    // to check all relevant groups looking for win or block.
+    this.startDeltas = [
       [
         [3, -3],
         [2, -2],
@@ -244,40 +39,309 @@ class Maxaminion {
         [0, 0],
       ],
     ];
-    // for each deltas group in deltas
-    for (let i = 0; i < deltas.length; i++) {
+  }
+
+  /////////////////////////////////////////////////
+  /*  Return the column move the AI makes. This  */
+  /*  function is for game object to call.       */
+  /*  Player one is the maximizing player.       */
+  getMove() {
+    const maximizing = GAME.player === 1 ? true : false;
+    const depth = GAME.player === 1 ? this._depth2 : this._depth;
+    const algo =
+      GAME.player === 1 ? this._algo2.bind(this) : this._algo.bind(this);
+
+    return this.minimax(maximizing, depth, -Infinity, Infinity, algo)[1];
+  }
+
+  //////////////////////////////////////////////////
+  /*  Minimax algorithm with alpha beta prunning  */
+  /*  and recursion depth limit. Adapted from the */
+  /*  codecademy ML minimax unit connect four.    */
+  /*  Return array is [ evalValue, move, depth ]. */
+  minimax(maximizing, depth, alpha, beta, algo, y = null, x = null) {
+    // Check for game-over conditions. See if the last player won
+    // or board is full.
+    let winnerEval = this.checkForWinner(!maximizing, y, x);
+    let openColumns = this.getOpenColumns();
+    // If there was a winner or there are no open spaces on board return data.
+    if (winnerEval || openColumns.length === 0) {
+      // If there was no winner winnerEval is False board was full.
+      //  winnerEval is set to zero as it was a tie.
+      winnerEval = !winnerEval ? 0 : winnerEval;
+      return [winnerEval, '', depth];
+    }
+    // If depth is zero evaluate board.
+    if (depth === 0) return [algo(), '', depth];
+
+    let bestDepth = depth;
+    openColumns = shuffle(openColumns);
+    let [bestMove, best] = this.getBestMove(openColumns, depth, maximizing);
+
+    if (maximizing) {
+      let bestValue = -Infinity;
+      for (let col of openColumns) {
+        // Place piece in col note the row piece was placed into.
+        const idxRow = this.placePieceInBoard(col, 1);
+        // Recursive call.
+        const [evalValue, , newDepth] = this.minimax(
+          // input values
+          false,
+          depth - 1,
+          alpha,
+          beta,
+          algo,
+          idxRow,
+          col
+        );
+        // Backtrack board and openRowinCol state.
+        GAME.board[idxRow][col] = 0;
+        GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
+        //  maximizing player looks for the highes eval number.
+        if (evalValue > bestValue) {
+          bestValue = evalValue;
+          bestMove = col;
+          bestDepth = newDepth;
+        } else if (
+          // More depth allows for longer play / chance for human to err.
+          // Select for greater depth if eval scores are equal.
+          // But, if eval shows other player wins and there is a best
+          // move, don't set anything here. This is so if all column moves
+          // lead to the other player winning a blocking move or
+          //  non-pedestal move will be used.
+          (evalValue !== -Infinity || (evalValue === -Infinity && !best)) &&
+          evalValue === bestValue &&
+          newDepth < bestDepth
+        ) {
+          bestMove = col;
+          bestDepth = newDepth;
+        }
+        // Prune.
+        alpha = Math.max(alpha, bestValue);
+        if (alpha >= beta) break;
+      }
+      return [bestValue, bestMove, bestDepth];
+    }
+    // minimizing
+    let bestValue = Infinity;
+    for (let col of openColumns) {
+      // Place piece in col note row piece placed into.
+      const idxRow = this.placePieceInBoard(col, 2);
+      // Recursive call.
+      const [evalValue, , newDepth] = this.minimax(
+        // input values
+        true,
+        depth - 1,
+        alpha,
+        beta,
+        algo,
+        idxRow,
+        col
+      );
+      // Backtrack board and openRowinCol state.
+      GAME.board[idxRow][col] = 0;
+      GAME.openRowInCol.set(col, GAME.openRowInCol.get(col) + 1);
+      //  minimizing player looks for the lowest eval number.
+      if (evalValue < bestValue) {
+        bestValue = evalValue;
+        bestMove = col;
+        bestDepth = newDepth;
+      } else if (
+        // More depth allows for longer play / chance for human to err.
+        // Select for greater depth if eval scores are equal.
+        // But, if eval shows other player wins and there is a best
+        // move, don't set anything here. This is so if all column moves
+        // lead to the other player winning a blocking move or
+        //  non-pedestal move will be used.
+        (evalValue !== Infinity || (evalValue === Infinity && !best)) &&
+        evalValue === bestValue &&
+        newDepth < bestDepth
+      ) {
+        bestMove = col;
+        bestDepth = newDepth;
+      }
+      // Prune.
+      beta = Math.min(beta, bestValue);
+      if (beta <= alpha) break;
+    }
+    return [bestValue, bestMove, bestDepth];
+  }
+
+  /////////////////////////////////////////////
+  /*  Check board for four pieces in a row.    */
+  /*  Return evaluation value appropriate for  */
+  /*  the winning player if a player has won.  */
+  checkForWinner(maximizing, y, x) {
+    if (x === null || y === null) return false;
+    const player = maximizing ? 1 : 2;
+    let winnerEval = false;
+
+    // for each deltas group in start position deltas
+    this.startDeltas.forEach((group, i) => {
       // for each delta offset to the current position
-      for (let [dy, dx] of deltas[i]) {
+      group.forEach(([dy, dx]) => {
+        let a = y + dy,
+          b = x + dx;
+        // if piece in board at current start position is player's
+        if (GAME.board[a] && GAME.board[a][b] === player) {
+          // win if each of the offsets to the current position is players piece
+          if (
+            GAME.deltas[i].every(([dy1, dx1]) => {
+              if (
+                GAME.board[a + dy1] &&
+                GAME.board[a + dy1][b + dx1] === player
+              ) {
+                return true;
+              } else return false;
+            })
+          )
+            winnerEval = player === 1 ? Infinity : -Infinity;
+        }
+      });
+    });
+    return winnerEval;
+  }
+
+  ///////////////////////////////////////////////////
+  /*  Return list of game board columns with empty */
+  /*  spots for game pieces to be placed into.     */
+  getOpenColumns() {
+    return GAME.board[0].reduce((acc, el, i) => {
+      if (el === 0) acc.push(i);
+      return acc;
+    }, []);
+  }
+
+  //////////////////////////////////////////////////////////
+  /*  Set player number in board in open spot in column.  */
+  /*  Decrement openRow value in openRowInCol Map.        */
+  /*  Return row index where player piece is now.         */
+  placePieceInBoard(col, player) {
+    const openRow = GAME.openRowInCol.get(col);
+    // Decrement value for this column.
+    GAME.openRowInCol.set(col, openRow - 1);
+    GAME.board[openRow][col] = player;
+    return openRow;
+  }
+
+  //////////////////////////////////////////////////////////////////
+  /*  Get Best Move function.                                     */
+  /*  If called at top level of minimax recursion then:           */
+  /*  If any move blocks a winning play pick it as the best move. */
+  /*  If there is not a blocking move pick a non-pedestal move.   */
+  /*  (A "pedestal move" being a move that creates a              */
+  /*  winning opportunity for opponent)                           */
+  /*  If no block or non-pedestal moves pick first element.       */
+  getBestMove(openCols, depth, maximizing) {
+    // if no blocking moves prefer non-pedestal moves
+    const notpedestal = [];
+    if (
+      // only check at top level of recursion
+      (maximizing && depth === this._depth2) ||
+      (!maximizing && depth === this._depth)
+    ) {
+      for (let col of openCols) {
+        const openRow = GAME.openRowInCol.get(col);
+        if (this.checkForBlock(openRow, col)) {
+          return [col, true];
+        }
+        if (!this.checkForpedestal(openRow - 1, col, maximizing)) {
+          notpedestal.push(col);
+        }
+      }
+    }
+    if (notpedestal.length > 0) return [notpedestal[0], true];
+    return [openCols[0], false];
+  }
+
+  //////////////////////////////////////////////////
+  /*  Check if placing opponents piece above      */
+  /*  just placed piece creates win for opponent. */
+  checkForpedestal(openRow, col, maximizing) {
+    // if no spot above return
+    if (openRow < 0) return false;
+    // place opponents piece, check for win, backtrack
+    GAME.board[openRow][col] = maximizing ? 2 : 1;
+    const winner = this.checkForWinner(!maximizing, openRow, col);
+    GAME.board[openRow][col] = 0;
+    return winner ? true : false;
+  }
+
+  //////////////////////////////////////////////////////////
+  /*  Check if putting a piece at y, x in board will      */
+  /*  block a winning play. If three of opponents pieces  */
+  /*  and one of players in a relevant delta group a      */
+  /*  block happened. Return true or false.               */
+  checkForBlock(y, x) {
+    // set player in board temporarily.
+    GAME.board[y][x] = GAME.player;
+    let block = false;
+
+    // for each deltas group in start position deltas
+    this.startDeltas.forEach((group, i) => {
+      // for each delta offset to the current position
+      group.forEach(([dy, dx]) => {
         let a = y + dy,
           b = x + dx;
         // if piece in board at current start position
         if (GAME.board[a] && GAME.board[a][b]) {
-          // keep count of current players piece count
           let selfCount = 0;
           let fail = false;
           if (GAME.board[a][b] === GAME.player) selfCount++;
           // for each of the offsets to the current start position
-          for (let [dy1, dx1] of GAME.deltas[i]) {
+          GAME.deltas[i].forEach(([dy1, dx1]) => {
             let m = a + dy1,
               n = b + dx1;
-            // if not valid spot of no piece there fail
-            if (!GAME.board[m] || !GAME.board[m][n]) {
-              fail = true;
-              break;
-            } else if (GAME.board[m][n] === GAME.player) selfCount++;
-          }
+            // if not valid spot or no piece there fail
+            if (!GAME.board[m] || !GAME.board[m][n]) fail = true;
+            else if (GAME.board[m][n] === GAME.player) selfCount++;
+          });
           // if not fail and selfCount is one a block happened
           if (!fail && selfCount === 1) {
             // backtrack
-            GAME.board[y][x] = 0;
-            return true;
+            block = true;
           }
         }
-      }
-    }
+      });
+    });
     // backtrack
     GAME.board[y][x] = 0;
-    return false;
+    return block;
+
+    // // for each deltas group in start position deltas
+    // for (let i = 0; i < this.startDeltas.length; i++) {
+    //   // for each delta offset to the current position
+    //   for (let [dy, dx] of this.startDeltas[i]) {
+    //     let a = y + dy,
+    //       b = x + dx;
+    //     // if piece in board at current start position
+    //     if (GAME.board[a] && GAME.board[a][b]) {
+    //       // keep count of current players piece count
+    //       let selfCount = 0;
+    //       let fail = false;
+    //       if (GAME.board[a][b] === GAME.player) selfCount++;
+    //       // for each of the offsets to the current start position
+    //       for (let [dy1, dx1] of GAME.deltas[i]) {
+    //         let m = a + dy1,
+    //           n = b + dx1;
+    //         // if not valid spot of no piece there fail
+    //         if (!GAME.board[m] || !GAME.board[m][n]) {
+    //           fail = true;
+    //           break;
+    //         } else if (GAME.board[m][n] === GAME.player) selfCount++;
+    //       }
+    //       // if not fail and selfCount is one a block happened
+    //       if (!fail && selfCount === 1) {
+    //         // backtrack
+    //         GAME.board[y][x] = 0;
+    //         return true;
+    //       }
+    //     }
+    //   }
+    // }
+    // // backtrack
+    // GAME.board[y][x] = 0;
+    // return false;
   }
 
   ////////////////////////////////////////////////////
@@ -299,6 +363,13 @@ class Maxaminion {
         console.error('bad switchEvalAlgo flag');
       }
     }
+  }
+
+  /////////////////////////////////
+  /*  Reset both AI depths to 5. */
+  resetDepths() {
+    this._depth = 5;
+    this._depth2 = 5;
   }
 
   ///////////////////////////////////////////////

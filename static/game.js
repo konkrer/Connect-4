@@ -380,6 +380,7 @@ class ConnectFour {
     this._rows = num;
     this.DOMBoardInit();
     this.initGame();
+    this.resetAiDepth();
   }
 
   /////////////////////////////////////////////////////
@@ -391,6 +392,7 @@ class ConnectFour {
     this._cols = num;
     this.DOMBoardInit();
     this.initGame();
+    this.resetAiDepth();
   }
 
   /////////////////////////////////////
@@ -403,18 +405,38 @@ class ConnectFour {
     clearTimeout(this.aiTimeouts);
     this._aiPlayers = num;
     this.resetPlayRate();
+    this.resetAiDepth();
     this.aiPlayersChangeTimers = setTimeout(() => {
+      let temp = this.moves;
+      // looking for game over. If col click is blocked and
+      // no moves are being made the game is over init a new game.
+      // if moves are being made return.
+      if (this.blockColClick) {
+        setTimeout(() => {
+          if (temp === this.moves) {
+            this.initGame();
+          }
+        }, 3.4 * this._dropDelay);
+        return;
+      }
       if (this._aiPlayers === 1 && this.player == 2) this.makeAIMove();
       if (this._aiPlayers === 2) {
-        // if ai's are already active from quick flip from
-        // one to two ai's don't make ai move. If moves
+        // quick flip from one to two ai's can keep
+        // ai play active. If this.moves
         // is not chaging make ai move.
-        let temp = this.moves;
         setTimeout(() => {
           if (this.moves === temp) this.makeAIMove();
         }, 2 * this._dropDelay);
       }
-    }, 4 * this._dropDelay);
+    }, 6 * this._dropDelay);
+  }
+
+  //////////////////////////////////////
+  /*  Set _dropDelay to given value.  */
+  resetAiDepth() {
+    MAXIMINION.resetDepths();
+    document.querySelector('#depth').value = 5;
+    document.querySelector('#depth2').value = 5;
   }
 
   //////////////////////////////////////
