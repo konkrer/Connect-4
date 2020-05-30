@@ -40,7 +40,7 @@ body {
   font-family: 'Changa One';
 }
 
-.navbar button {
+.start-btn {
   background-color: #00bb0d;
   font-weight: 700;
   box-shadow: 2px 2px 2px black, -1px 0px 0px black, -1px -1px 1px black;
@@ -69,7 +69,10 @@ body {
 
 .settings-zone {
   position: absolute;
-  top: 45vh;
+  bottom: calc(
+    calc(calc(100vh - var(--navbar-height)) / 2) -
+      calc(calc(var(--settings-button) / 2) + 1em)
+  );
   left: 0%;
   z-index: 7;
 }
@@ -156,12 +159,26 @@ menu input[type='number'] {
   border: 2px rgba(0, 255, 255, 0.358) solid;
 }
 
+.floating-restart {
+  position: absolute;
+  width: 60px;
+  bottom: calc(
+    calc(calc(100vh - var(--navbar-height)) / 2) -
+      calc(var(--settings-button) / 2)
+  );
+  right: 3%;
+  z-index: 7;
+  visibility: hidden;
+}
+
 main {
   height: calc(100vh - var(--navbar-height));
+  background-color: rgb(0, 0, 0);
 }
 
 .board {
-  background-color: rgb(0, 0, 0);
+  position: relative;
+  padding-bottom: 1em;
 }
 
 .column {
@@ -248,6 +265,9 @@ main {
   height: 100%;
   border-radius: 50%;
   position: absolute;
+}
+
+.backface-hidden {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }

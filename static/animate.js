@@ -15,14 +15,16 @@ function animateDrop(col, places) {
     topPieceViewport.firstElementChild.firstElementChild.lastElementChild.classList.add(
       'hidden'
     );
-    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.style.backfaceVisibility =
-      'visible';
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.remove(
+      'backface-hidden'
+    );
   } else {
     topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.add(
       'hidden'
     );
-    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.style.backfaceVisibility =
-      'visible';
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.classList.remove(
+      'backface-hidden'
+    );
   }
 
   const newPiece = GAME.pieceFactory(col);
@@ -43,10 +45,13 @@ function animateDrop(col, places) {
     topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.remove(
       'hidden'
     );
-    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.style =
-      '';
-    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.style =
-      '';
+    topPieceViewport.firstElementChild.firstElementChild.lastElementChild.classList.add(
+      'backface-hidden'
+    );
+    topPieceViewport.firstElementChild.firstElementChild.firstElementChild.classList.add(
+      'backface-hidden'
+    );
+    ('');
     // Add new piece to column.
     topPieceViewport.parentElement.innerHTML += newPiece;
     // While column is not yet full of pieces fade new piece in.

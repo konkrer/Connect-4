@@ -5,7 +5,7 @@
 /*  methods for  playing a game of Connect Four.          */
 class ConnectFour {
   constructor() {
-    this.DOMBoard = document.querySelector('.board');
+    this.DOMBoard = document.querySelector('main');
     this.DOMColumns = null;
     this.aiTimeouts = [null, null];
     this.flipAllTimer = null;
@@ -254,7 +254,7 @@ class ConnectFour {
     // Clear all columns from board.
     this.DOMBoard.innerHTML = '';
     const colWrapper = document.createElement('div');
-    colWrapper.style.position = 'relative';
+    colWrapper.classList.add('board');
     this.DOMBoard.append(colWrapper);
     // Add columns to board.
     for (let i = 0; i < this._cols; i++) {
@@ -354,8 +354,8 @@ class ConnectFour {
     return `<div class="piece-viewport opaque" data-col="${col}">
                     <div class="piece-wrapper flx-std">
                         <div class="piece ${flipped}">
-                            <div class="front" data-col="${col}"></div>
-                            <div class="back" data-col="${col}"></div>
+                            <div class="front backface-hidden" data-col="${col}"></div>
+                            <div class="back backface-hidden" data-col="${col}"></div>
                         </div>
                     </div>        
                 </div>`;
