@@ -1,6 +1,11 @@
 # Connect-4
 
-Connect four game with AI second player, AI vs. AI, or two player game mode. Uses minimax algorithm.
+Connect four game with AI second player, AI vs. AI, or two player game mode.  
+
+Uses minimax algorithm with alpha/beta prunning and recursion depth limiting.  
+
+##### Tech Stack
+JavaScript - CSS - HTML
 
 live at https://konkrer.github.io/Connect-4/
 
