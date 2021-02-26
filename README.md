@@ -1,6 +1,6 @@
 # Connect-4
 
-##Connect four game with AI second player, AI vs. AI, or two player game mode.
+## Connect four game with AI second player, AI vs. AI, or two player game mode.
 
 Uses minimax algorithm with alpha/beta pruning and recursion depth limiting.
 
