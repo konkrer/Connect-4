@@ -4,6 +4,10 @@
 
 ### Uses minimax algorithm with alpha/beta pruning and recursion depth limiting.
 
+###### Note:
+The minimax algorithim used by this application was adapted from an algorithm used to teach minimax algorithm at Codecademy Data Science Career Path.  
+website: [Codcademy Data Science Carreer Path](https://www.codecademy.com/learn/paths/data-science)
+
 ## Tech Stack
 
 JavaScript - CSS - HTML
